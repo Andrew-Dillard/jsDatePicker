@@ -13,9 +13,11 @@
 
 // The Month and Year will be displayed at the top center of the calendar and will change as needed as the user interacts with the month buttons. 
 
-
-const dateButton = document.querySelector('.date-picker-button');
-const calendar = document.querySelector('.date-picker')
+const container = document.querySelector('.date-picker-container')
+const dateButton = container.querySelector('.date-picker-button');
+const calendar = container.querySelector('.date-picker')
+const grid = calendar.querySelector('.date-picker-grid-dates')
+const dates = grid.querySelectorAll('.date')
 
 // Task 1 - Complete 
 // Allow the user to toggle the visibility of the calendar with the button
@@ -23,5 +25,26 @@ dateButton.addEventListener('click', () => {
   calendar.classList.toggle('show')
 })
 
-// Task 2 
-// Make the calendar hidden upon page load
+// Task 2 - Complete
+// Make the calendar hidden upon page load (done in the HTML by removing show class to begin with)
+
+// Task 3 
+// Change the blue highlight styling to the new date the user picks
+// and remove the styling from the previously selected date
+
+// Add a click event listener to the grid of dates
+grid.addEventListener('click', (event) => {
+  console.log('clicked on grid')
+  // Grab the button the user selected..
+  const selectedDate = event.target
+  // ..and toggle the 'selected' class to add blue highlighting
+  selectedDate.classList.toggle('selected')
+  // Then loop through all the other buttons and remove the class of 'selected'
+  dates.forEach((date) => {
+    // Don't remove the styling we just set for the newly selected date! 
+    if (date !== selectedDate) {
+      date.classList.remove('selected')
+    }
+  })
+
+})
