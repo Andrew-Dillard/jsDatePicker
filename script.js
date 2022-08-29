@@ -13,11 +13,15 @@
 
 // The Month and Year will be displayed at the top center of the calendar and will change as needed as the user interacts with the month buttons. 
 
-// Task 1
-// Allow the user to toggle the visibility of the calendar with the button
+
 const dateButton = document.querySelector('.date-picker-button');
 const calendar = document.querySelector('.date-picker')
 
+// Task 1 - Complete 
+// Allow the user to toggle the visibility of the calendar with the button
 dateButton.addEventListener('click', () => {
   calendar.classList.toggle('show')
 })
+
+// Task 2 
+// Make the calendar hidden upon page load
