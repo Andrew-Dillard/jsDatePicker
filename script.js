@@ -85,14 +85,8 @@ const currentMonthYear = format(new Date(), "MMMM - yyyy")
 monthYearHeader.textContent = currentMonthYear
 
 
-// Task 6 - Use the current month and year to update the calendar with the correct dates
-
-// Task 7 - Allow the user to toggle the month with left and right month buttons
-
-// Task 8 - Make sure the calendar date button updates with the new date when the user picks a different date. 
-
-/// CURRENT WORKSPACE ///
-
+// Task 6 - Complete
+// Use the current month and year to update the calendar with the correct dates
 
 // Get the current day by creating a new instance of the Date class
 const today = new Date();
@@ -127,11 +121,32 @@ for (i = 0; i < allDaysNumbers.length; i++) {
   dates[i].textContent = allDaysNumbers[i]
 }
 
+// Task 7 - Add grayed out styling to dates that are not part of the current month
+
+/// CURRENT WORKSPACE ///
+
+console.dir(allDays)
+
+// Create an array mapping the 35 or 42 days to their month
+// console.dir(allDays[1].getMonth() === currentMonth) // true
+
+const areDaysPartOfMonth = []
+allDays.forEach((day) => {
+  if (day.getMonth() === currentMonth) {
+    areDaysPartOfMonth.push(true)
+  } else  {
+    areDaysPartOfMonth.push(false)
+  }
+})
+console.dir(areDaysPartOfMonth)
 
 
-  
-  // const currentDate = new Date(currentYear, currentMonth, currentDayOfMonth);
-  
-  
+for (i = 0; i < areDaysPartOfMonth.length; i++) {
+  if (areDaysPartOfMonth[i] === true) continue
+  dates[i].classList.add('date-picker-other-month-date')
+}
 
 
+// Task 8 - Allow the user to toggle the month with left and right month buttons
+
+// Task 9 - Make sure the calendar date button updates with the new date when the user picks a different date. 
