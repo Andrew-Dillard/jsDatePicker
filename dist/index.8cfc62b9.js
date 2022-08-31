@@ -575,32 +575,52 @@ grid.addEventListener("click", (event)=>{
     // Then loop through all the other buttons and remove the class of 'selected'
     dates.forEach((date)=>{
         // Don't remove the styling we just set for the newly selected date! 
-        if (date !== selectedDate) date.classList.remove("selected");
+        if (date === selectedDate) return;
+        date.classList.remove("selected");
     });
 });
+// Use the imported library to format the current day and store it
 const formattedDate = (0, _dateFns.format)(new Date(), "MMMM do, yyyy") // August 29th, 2022
 ;
-console.log(formattedDate);
 // Assign the current date in the proper format to our calendar date button
 dateButton.textContent = formattedDate;
 // Task 5 - Complete
 // Display the correct month and year in the header
+// Create a date format for our calendar header..
 const currentMonthYear = (0, _dateFns.format)(new Date(), "MMMM - yyyy");
+// ..and assign it to the header
 monthYearHeader.textContent = currentMonthYear;
-// Built-in JS functions
-const currentDate = new Date();
-// console.log(currentDate) // Mon Aug 29 2022 13:50:13 GMT-0500 (Central Daylight Time)
-const currentYearValue = currentDate.getFullYear() // 2022
-;
-const currentMonthValue = currentDate.getMonth() // 7
-;
-const currentDayOfWeekValue = currentDate.getDay() // 1 (Monday)
-;
-const currentDayOfMonthValue = currentDate.getDate() // 29
-;
-const firstDayOfCurrentMonth = (0, _dateFns.startOfMonth)(new Date());
-// console.log(firstDayOfCurrentMonth) // Mon Aug 01 2022 00:00:00 GMT-0500 (Central Daylight Time)
-const firstDayOfCurrentWeek = (0, _dateFns.startOfWeek)(new Date()) // console.log(firstDayOfCurrentWeek) // Sun Aug 28 2022 00:00:00 GMT-0500 (Central Daylight Time)
+// Task 6 - Use the current month and year to update the calendar with the correct dates
+// Task 7 - Allow the user to toggle the month with left and right month buttons
+// Task 8 - Make sure the calendar date button updates with the new date when the user picks a different date. 
+/// CURRENT WORKSPACE ///
+// console.log(currentDate)
+const today = new Date();
+const currentYear = today.getFullYear();
+const currentMonth = today.getMonth();
+const currentDayOfMonth = today.getDate();
+const currentDayOfWeek = today.getDay();
+const numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(today);
+const firstDayOfFirstWeek = (0, _dateFns.startOfWeek)(new Date(currentYear, currentMonth));
+console.dir(firstDayOfFirstWeek);
+const lastDayOfLastWeek = (0, _dateFns.endOfWeek)(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth));
+console.dir(lastDayOfLastWeek);
+allDays = (0, _dateFns.eachDayOfInterval)({
+    start: firstDayOfFirstWeek,
+    end: lastDayOfLastWeek
+});
+console.dir(allDays) // Creates an array of all the days of August of the form:
+ // Mon Aug 01 2022 00:00:00 GMT-0500 (Central Daylight Time)
+ // const allAugustDays = eachDayOfInterval({
+ //   start: new Date(2022, 7, 1),
+ //   end: new Date(2022, 7, 31)
+ // })
+ // console.dir(allAugustDays)
+ // const firstDayOfAugust = allAugustDays[0]
+ // console.dir(firstDayOfAugust)
+ // console.dir(firstDayOfAugust.getDay())
+ // const weeksInCurrentMonth = getWeeksInMonth(today)
+ // const currentDate = new Date(currentYear, currentMonth, currentDayOfMonth);
 ;
 
 },{"date-fns":"9yHCA"}],"9yHCA":[function(require,module,exports) {
@@ -1327,7 +1347,7 @@ var _indexJsDefault238 = parcelHelpers.interopDefault(_indexJs238);
 var _indexJs239 = require("./constants/index.js");
 parcelHelpers.exportAll(_indexJs239, exports);
 
-},{"./add/index.js":false,"./addBusinessDays/index.js":false,"./addDays/index.js":false,"./addHours/index.js":false,"./addISOWeekYears/index.js":false,"./addMilliseconds/index.js":"7Tp9s","./addMinutes/index.js":false,"./addMonths/index.js":false,"./addQuarters/index.js":false,"./addSeconds/index.js":false,"./addWeeks/index.js":false,"./addYears/index.js":false,"./areIntervalsOverlapping/index.js":false,"./clamp/index.js":false,"./closestIndexTo/index.js":false,"./closestTo/index.js":false,"./compareAsc/index.js":false,"./compareDesc/index.js":false,"./daysToWeeks/index.js":false,"./differenceInBusinessDays/index.js":false,"./differenceInCalendarDays/index.js":false,"./differenceInCalendarISOWeekYears/index.js":false,"./differenceInCalendarISOWeeks/index.js":false,"./differenceInCalendarMonths/index.js":false,"./differenceInCalendarQuarters/index.js":false,"./differenceInCalendarWeeks/index.js":false,"./differenceInCalendarYears/index.js":false,"./differenceInDays/index.js":false,"./differenceInHours/index.js":false,"./differenceInISOWeekYears/index.js":false,"./differenceInMilliseconds/index.js":false,"./differenceInMinutes/index.js":false,"./differenceInMonths/index.js":false,"./differenceInQuarters/index.js":false,"./differenceInSeconds/index.js":false,"./differenceInWeeks/index.js":false,"./differenceInYears/index.js":false,"./eachDayOfInterval/index.js":false,"./eachHourOfInterval/index.js":false,"./eachMinuteOfInterval/index.js":false,"./eachMonthOfInterval/index.js":false,"./eachQuarterOfInterval/index.js":false,"./eachWeekOfInterval/index.js":false,"./eachWeekendOfInterval/index.js":false,"./eachWeekendOfMonth/index.js":false,"./eachWeekendOfYear/index.js":false,"./eachYearOfInterval/index.js":false,"./endOfDay/index.js":false,"./endOfDecade/index.js":false,"./endOfHour/index.js":false,"./endOfISOWeek/index.js":false,"./endOfISOWeekYear/index.js":false,"./endOfMinute/index.js":false,"./endOfMonth/index.js":false,"./endOfQuarter/index.js":false,"./endOfSecond/index.js":false,"./endOfToday/index.js":false,"./endOfTomorrow/index.js":false,"./endOfWeek/index.js":false,"./endOfYear/index.js":false,"./endOfYesterday/index.js":false,"./format/index.js":"lnm6V","./formatDistance/index.js":false,"./formatDistanceStrict/index.js":false,"./formatDistanceToNow/index.js":false,"./formatDistanceToNowStrict/index.js":false,"./formatDuration/index.js":false,"./formatISO/index.js":false,"./formatISO9075/index.js":false,"./formatISODuration/index.js":false,"./formatRFC3339/index.js":false,"./formatRFC7231/index.js":false,"./formatRelative/index.js":false,"./fromUnixTime/index.js":false,"./getDate/index.js":false,"./getDay/index.js":false,"./getDayOfYear/index.js":false,"./getDaysInMonth/index.js":false,"./getDaysInYear/index.js":false,"./getDecade/index.js":false,"./getDefaultOptions/index.js":"5eSfl","./getHours/index.js":false,"./getISODay/index.js":false,"./getISOWeek/index.js":false,"./getISOWeekYear/index.js":false,"./getISOWeeksInYear/index.js":false,"./getMilliseconds/index.js":false,"./getMinutes/index.js":false,"./getMonth/index.js":false,"./getOverlappingDaysInIntervals/index.js":false,"./getQuarter/index.js":false,"./getSeconds/index.js":false,"./getTime/index.js":false,"./getUnixTime/index.js":false,"./getWeek/index.js":false,"./getWeekOfMonth/index.js":false,"./getWeekYear/index.js":false,"./getWeeksInMonth/index.js":false,"./getYear/index.js":false,"./hoursToMilliseconds/index.js":false,"./hoursToMinutes/index.js":false,"./hoursToSeconds/index.js":false,"./intervalToDuration/index.js":false,"./intlFormat/index.js":false,"./intlFormatDistance/index.js":false,"./isAfter/index.js":false,"./isBefore/index.js":false,"./isDate/index.js":"kqNhT","./isEqual/index.js":false,"./isExists/index.js":false,"./isFirstDayOfMonth/index.js":false,"./isFriday/index.js":false,"./isFuture/index.js":false,"./isLastDayOfMonth/index.js":false,"./isLeapYear/index.js":false,"./isMatch/index.js":false,"./isMonday/index.js":false,"./isPast/index.js":false,"./isSameDay/index.js":false,"./isSameHour/index.js":false,"./isSameISOWeek/index.js":false,"./isSameISOWeekYear/index.js":false,"./isSameMinute/index.js":false,"./isSameMonth/index.js":false,"./isSameQuarter/index.js":false,"./isSameSecond/index.js":false,"./isSameWeek/index.js":false,"./isSameYear/index.js":false,"./isSaturday/index.js":false,"./isSunday/index.js":false,"./isThisHour/index.js":false,"./isThisISOWeek/index.js":false,"./isThisMinute/index.js":false,"./isThisMonth/index.js":false,"./isThisQuarter/index.js":false,"./isThisSecond/index.js":false,"./isThisWeek/index.js":false,"./isThisYear/index.js":false,"./isThursday/index.js":false,"./isToday/index.js":false,"./isTomorrow/index.js":false,"./isTuesday/index.js":false,"./isValid/index.js":"eXoMl","./isWednesday/index.js":false,"./isWeekend/index.js":false,"./isWithinInterval/index.js":false,"./isYesterday/index.js":false,"./lastDayOfDecade/index.js":false,"./lastDayOfISOWeek/index.js":false,"./lastDayOfISOWeekYear/index.js":false,"./lastDayOfMonth/index.js":false,"./lastDayOfQuarter/index.js":false,"./lastDayOfWeek/index.js":false,"./lastDayOfYear/index.js":false,"./lightFormat/index.js":false,"./max/index.js":false,"./milliseconds/index.js":false,"./millisecondsToHours/index.js":false,"./millisecondsToMinutes/index.js":false,"./millisecondsToSeconds/index.js":false,"./min/index.js":false,"./minutesToHours/index.js":false,"./minutesToMilliseconds/index.js":false,"./minutesToSeconds/index.js":false,"./monthsToQuarters/index.js":false,"./monthsToYears/index.js":false,"./nextDay/index.js":false,"./nextFriday/index.js":false,"./nextMonday/index.js":false,"./nextSaturday/index.js":false,"./nextSunday/index.js":false,"./nextThursday/index.js":false,"./nextTuesday/index.js":false,"./nextWednesday/index.js":false,"./parse/index.js":false,"./parseISO/index.js":false,"./parseJSON/index.js":false,"./previousDay/index.js":false,"./previousFriday/index.js":false,"./previousMonday/index.js":false,"./previousSaturday/index.js":false,"./previousSunday/index.js":false,"./previousThursday/index.js":false,"./previousTuesday/index.js":false,"./previousWednesday/index.js":false,"./quartersToMonths/index.js":false,"./quartersToYears/index.js":false,"./roundToNearestMinutes/index.js":false,"./secondsToHours/index.js":false,"./secondsToMilliseconds/index.js":false,"./secondsToMinutes/index.js":false,"./set/index.js":false,"./setDate/index.js":false,"./setDay/index.js":false,"./setDayOfYear/index.js":false,"./setDefaultOptions/index.js":false,"./setHours/index.js":false,"./setISODay/index.js":false,"./setISOWeek/index.js":false,"./setISOWeekYear/index.js":false,"./setMilliseconds/index.js":false,"./setMinutes/index.js":false,"./setMonth/index.js":false,"./setQuarter/index.js":false,"./setSeconds/index.js":false,"./setWeek/index.js":false,"./setWeekYear/index.js":false,"./setYear/index.js":false,"./startOfDay/index.js":false,"./startOfDecade/index.js":false,"./startOfHour/index.js":false,"./startOfISOWeek/index.js":false,"./startOfISOWeekYear/index.js":false,"./startOfMinute/index.js":false,"./startOfMonth/index.js":"6xvSk","./startOfQuarter/index.js":false,"./startOfSecond/index.js":false,"./startOfToday/index.js":false,"./startOfTomorrow/index.js":false,"./startOfWeek/index.js":"fD46d","./startOfWeekYear/index.js":false,"./startOfYear/index.js":false,"./startOfYesterday/index.js":false,"./sub/index.js":false,"./subBusinessDays/index.js":false,"./subDays/index.js":false,"./subHours/index.js":false,"./subISOWeekYears/index.js":false,"./subMilliseconds/index.js":"lL2M9","./subMinutes/index.js":false,"./subMonths/index.js":false,"./subQuarters/index.js":false,"./subSeconds/index.js":false,"./subWeeks/index.js":false,"./subYears/index.js":false,"./toDate/index.js":"fsust","./weeksToDays/index.js":false,"./yearsToMonths/index.js":false,"./yearsToQuarters/index.js":false,"./constants/index.js":"iOhcx","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7Tp9s":[function(require,module,exports) {
+},{"./add/index.js":false,"./addBusinessDays/index.js":false,"./addDays/index.js":false,"./addHours/index.js":false,"./addISOWeekYears/index.js":false,"./addMilliseconds/index.js":"7Tp9s","./addMinutes/index.js":false,"./addMonths/index.js":false,"./addQuarters/index.js":false,"./addSeconds/index.js":false,"./addWeeks/index.js":false,"./addYears/index.js":false,"./areIntervalsOverlapping/index.js":false,"./clamp/index.js":false,"./closestIndexTo/index.js":false,"./closestTo/index.js":false,"./compareAsc/index.js":false,"./compareDesc/index.js":false,"./daysToWeeks/index.js":false,"./differenceInBusinessDays/index.js":false,"./differenceInCalendarDays/index.js":false,"./differenceInCalendarISOWeekYears/index.js":false,"./differenceInCalendarISOWeeks/index.js":false,"./differenceInCalendarMonths/index.js":false,"./differenceInCalendarQuarters/index.js":false,"./differenceInCalendarWeeks/index.js":"7Le9T","./differenceInCalendarYears/index.js":false,"./differenceInDays/index.js":false,"./differenceInHours/index.js":false,"./differenceInISOWeekYears/index.js":false,"./differenceInMilliseconds/index.js":false,"./differenceInMinutes/index.js":false,"./differenceInMonths/index.js":false,"./differenceInQuarters/index.js":false,"./differenceInSeconds/index.js":false,"./differenceInWeeks/index.js":false,"./differenceInYears/index.js":false,"./eachDayOfInterval/index.js":"a6iyr","./eachHourOfInterval/index.js":false,"./eachMinuteOfInterval/index.js":false,"./eachMonthOfInterval/index.js":false,"./eachQuarterOfInterval/index.js":false,"./eachWeekOfInterval/index.js":false,"./eachWeekendOfInterval/index.js":false,"./eachWeekendOfMonth/index.js":false,"./eachWeekendOfYear/index.js":false,"./eachYearOfInterval/index.js":false,"./endOfDay/index.js":false,"./endOfDecade/index.js":false,"./endOfHour/index.js":false,"./endOfISOWeek/index.js":false,"./endOfISOWeekYear/index.js":false,"./endOfMinute/index.js":false,"./endOfMonth/index.js":false,"./endOfQuarter/index.js":false,"./endOfSecond/index.js":false,"./endOfToday/index.js":false,"./endOfTomorrow/index.js":false,"./endOfWeek/index.js":"5zQJ5","./endOfYear/index.js":false,"./endOfYesterday/index.js":false,"./format/index.js":"lnm6V","./formatDistance/index.js":false,"./formatDistanceStrict/index.js":false,"./formatDistanceToNow/index.js":false,"./formatDistanceToNowStrict/index.js":false,"./formatDuration/index.js":false,"./formatISO/index.js":false,"./formatISO9075/index.js":false,"./formatISODuration/index.js":false,"./formatRFC3339/index.js":false,"./formatRFC7231/index.js":false,"./formatRelative/index.js":false,"./fromUnixTime/index.js":false,"./getDate/index.js":false,"./getDay/index.js":false,"./getDayOfYear/index.js":false,"./getDaysInMonth/index.js":"d31S3","./getDaysInYear/index.js":false,"./getDecade/index.js":false,"./getDefaultOptions/index.js":"5eSfl","./getHours/index.js":false,"./getISODay/index.js":false,"./getISOWeek/index.js":false,"./getISOWeekYear/index.js":false,"./getISOWeeksInYear/index.js":false,"./getMilliseconds/index.js":false,"./getMinutes/index.js":false,"./getMonth/index.js":false,"./getOverlappingDaysInIntervals/index.js":false,"./getQuarter/index.js":false,"./getSeconds/index.js":false,"./getTime/index.js":false,"./getUnixTime/index.js":false,"./getWeek/index.js":false,"./getWeekOfMonth/index.js":false,"./getWeekYear/index.js":false,"./getWeeksInMonth/index.js":"jaE4J","./getYear/index.js":false,"./hoursToMilliseconds/index.js":false,"./hoursToMinutes/index.js":false,"./hoursToSeconds/index.js":false,"./intervalToDuration/index.js":false,"./intlFormat/index.js":false,"./intlFormatDistance/index.js":false,"./isAfter/index.js":false,"./isBefore/index.js":false,"./isDate/index.js":"kqNhT","./isEqual/index.js":false,"./isExists/index.js":false,"./isFirstDayOfMonth/index.js":false,"./isFriday/index.js":false,"./isFuture/index.js":false,"./isLastDayOfMonth/index.js":false,"./isLeapYear/index.js":false,"./isMatch/index.js":false,"./isMonday/index.js":false,"./isPast/index.js":false,"./isSameDay/index.js":false,"./isSameHour/index.js":false,"./isSameISOWeek/index.js":false,"./isSameISOWeekYear/index.js":false,"./isSameMinute/index.js":false,"./isSameMonth/index.js":false,"./isSameQuarter/index.js":false,"./isSameSecond/index.js":false,"./isSameWeek/index.js":false,"./isSameYear/index.js":false,"./isSaturday/index.js":false,"./isSunday/index.js":false,"./isThisHour/index.js":false,"./isThisISOWeek/index.js":false,"./isThisMinute/index.js":false,"./isThisMonth/index.js":false,"./isThisQuarter/index.js":false,"./isThisSecond/index.js":false,"./isThisWeek/index.js":false,"./isThisYear/index.js":false,"./isThursday/index.js":false,"./isToday/index.js":false,"./isTomorrow/index.js":false,"./isTuesday/index.js":false,"./isValid/index.js":"eXoMl","./isWednesday/index.js":false,"./isWeekend/index.js":false,"./isWithinInterval/index.js":false,"./isYesterday/index.js":false,"./lastDayOfDecade/index.js":false,"./lastDayOfISOWeek/index.js":false,"./lastDayOfISOWeekYear/index.js":false,"./lastDayOfMonth/index.js":"6a7AM","./lastDayOfQuarter/index.js":false,"./lastDayOfWeek/index.js":false,"./lastDayOfYear/index.js":false,"./lightFormat/index.js":false,"./max/index.js":false,"./milliseconds/index.js":false,"./millisecondsToHours/index.js":false,"./millisecondsToMinutes/index.js":false,"./millisecondsToSeconds/index.js":false,"./min/index.js":false,"./minutesToHours/index.js":false,"./minutesToMilliseconds/index.js":false,"./minutesToSeconds/index.js":false,"./monthsToQuarters/index.js":false,"./monthsToYears/index.js":false,"./nextDay/index.js":false,"./nextFriday/index.js":false,"./nextMonday/index.js":false,"./nextSaturday/index.js":false,"./nextSunday/index.js":false,"./nextThursday/index.js":false,"./nextTuesday/index.js":false,"./nextWednesday/index.js":false,"./parse/index.js":false,"./parseISO/index.js":false,"./parseJSON/index.js":false,"./previousDay/index.js":false,"./previousFriday/index.js":false,"./previousMonday/index.js":false,"./previousSaturday/index.js":false,"./previousSunday/index.js":false,"./previousThursday/index.js":false,"./previousTuesday/index.js":false,"./previousWednesday/index.js":false,"./quartersToMonths/index.js":false,"./quartersToYears/index.js":false,"./roundToNearestMinutes/index.js":false,"./secondsToHours/index.js":false,"./secondsToMilliseconds/index.js":false,"./secondsToMinutes/index.js":false,"./set/index.js":false,"./setDate/index.js":false,"./setDay/index.js":false,"./setDayOfYear/index.js":false,"./setDefaultOptions/index.js":false,"./setHours/index.js":false,"./setISODay/index.js":false,"./setISOWeek/index.js":false,"./setISOWeekYear/index.js":false,"./setMilliseconds/index.js":false,"./setMinutes/index.js":false,"./setMonth/index.js":false,"./setQuarter/index.js":false,"./setSeconds/index.js":false,"./setWeek/index.js":false,"./setWeekYear/index.js":false,"./setYear/index.js":false,"./startOfDay/index.js":false,"./startOfDecade/index.js":false,"./startOfHour/index.js":false,"./startOfISOWeek/index.js":false,"./startOfISOWeekYear/index.js":false,"./startOfMinute/index.js":false,"./startOfMonth/index.js":"6xvSk","./startOfQuarter/index.js":false,"./startOfSecond/index.js":false,"./startOfToday/index.js":false,"./startOfTomorrow/index.js":false,"./startOfWeek/index.js":"fD46d","./startOfWeekYear/index.js":false,"./startOfYear/index.js":false,"./startOfYesterday/index.js":false,"./sub/index.js":false,"./subBusinessDays/index.js":false,"./subDays/index.js":false,"./subHours/index.js":false,"./subISOWeekYears/index.js":false,"./subMilliseconds/index.js":"lL2M9","./subMinutes/index.js":false,"./subMonths/index.js":false,"./subQuarters/index.js":false,"./subSeconds/index.js":false,"./subWeeks/index.js":false,"./subYears/index.js":false,"./toDate/index.js":"fsust","./weeksToDays/index.js":false,"./yearsToMonths/index.js":false,"./yearsToQuarters/index.js":false,"./constants/index.js":"iOhcx","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7Tp9s":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _indexJs = require("../_lib/toInteger/index.js");
@@ -1415,7 +1435,131 @@ function requiredArgs(required, args) {
 }
 exports.default = requiredArgs;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lnm6V":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7Le9T":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _indexJs = require("../startOfWeek/index.js");
+var _indexJsDefault = parcelHelpers.interopDefault(_indexJs);
+var _indexJs1 = require("../_lib/getTimezoneOffsetInMilliseconds/index.js");
+var _indexJsDefault1 = parcelHelpers.interopDefault(_indexJs1);
+var _indexJs2 = require("../_lib/requiredArgs/index.js");
+var _indexJsDefault2 = parcelHelpers.interopDefault(_indexJs2);
+var MILLISECONDS_IN_WEEK = 604800000;
+function differenceInCalendarWeeks(dirtyDateLeft, dirtyDateRight, options) {
+    (0, _indexJsDefault2.default)(2, arguments);
+    var startOfWeekLeft = (0, _indexJsDefault.default)(dirtyDateLeft, options);
+    var startOfWeekRight = (0, _indexJsDefault.default)(dirtyDateRight, options);
+    var timestampLeft = startOfWeekLeft.getTime() - (0, _indexJsDefault1.default)(startOfWeekLeft);
+    var timestampRight = startOfWeekRight.getTime() - (0, _indexJsDefault1.default)(startOfWeekRight); // Round the number of days to the nearest integer
+    // because the number of milliseconds in a week is not constant
+    // (e.g. it's different in the week of the daylight saving time clock shift)
+    return Math.round((timestampLeft - timestampRight) / MILLISECONDS_IN_WEEK);
+}
+exports.default = differenceInCalendarWeeks;
+
+},{"../startOfWeek/index.js":"fD46d","../_lib/getTimezoneOffsetInMilliseconds/index.js":"bc74C","../_lib/requiredArgs/index.js":"9wUgQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fD46d":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _indexJs = require("../toDate/index.js");
+var _indexJsDefault = parcelHelpers.interopDefault(_indexJs);
+var _indexJs1 = require("../_lib/toInteger/index.js");
+var _indexJsDefault1 = parcelHelpers.interopDefault(_indexJs1);
+var _indexJs2 = require("../_lib/requiredArgs/index.js");
+var _indexJsDefault2 = parcelHelpers.interopDefault(_indexJs2);
+var _indexJs3 = require("../_lib/defaultOptions/index.js");
+function startOfWeek(dirtyDate, options) {
+    var _ref, _ref2, _ref3, _options$weekStartsOn, _options$locale, _options$locale$optio, _defaultOptions$local, _defaultOptions$local2;
+    (0, _indexJsDefault2.default)(1, arguments);
+    var defaultOptions = (0, _indexJs3.getDefaultOptions)();
+    var weekStartsOn = (0, _indexJsDefault1.default)((_ref = (_ref2 = (_ref3 = (_options$weekStartsOn = options === null || options === void 0 ? void 0 : options.weekStartsOn) !== null && _options$weekStartsOn !== void 0 ? _options$weekStartsOn : options === null || options === void 0 ? void 0 : (_options$locale = options.locale) === null || _options$locale === void 0 ? void 0 : (_options$locale$optio = _options$locale.options) === null || _options$locale$optio === void 0 ? void 0 : _options$locale$optio.weekStartsOn) !== null && _ref3 !== void 0 ? _ref3 : defaultOptions.weekStartsOn) !== null && _ref2 !== void 0 ? _ref2 : (_defaultOptions$local = defaultOptions.locale) === null || _defaultOptions$local === void 0 ? void 0 : (_defaultOptions$local2 = _defaultOptions$local.options) === null || _defaultOptions$local2 === void 0 ? void 0 : _defaultOptions$local2.weekStartsOn) !== null && _ref !== void 0 ? _ref : 0); // Test if weekStartsOn is between 0 and 6 _and_ is not NaN
+    if (!(weekStartsOn >= 0 && weekStartsOn <= 6)) throw new RangeError("weekStartsOn must be between 0 and 6 inclusively");
+    var date = (0, _indexJsDefault.default)(dirtyDate);
+    var day = date.getDay();
+    var diff = (day < weekStartsOn ? 7 : 0) + day - weekStartsOn;
+    date.setDate(date.getDate() - diff);
+    date.setHours(0, 0, 0, 0);
+    return date;
+}
+exports.default = startOfWeek;
+
+},{"../toDate/index.js":"fsust","../_lib/toInteger/index.js":"f7kKX","../_lib/requiredArgs/index.js":"9wUgQ","../_lib/defaultOptions/index.js":"dWs8l","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dWs8l":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "getDefaultOptions", ()=>getDefaultOptions);
+parcelHelpers.export(exports, "setDefaultOptions", ()=>setDefaultOptions);
+var defaultOptions = {};
+function getDefaultOptions() {
+    return defaultOptions;
+}
+function setDefaultOptions(newOptions) {
+    defaultOptions = newOptions;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bc74C":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+function getTimezoneOffsetInMilliseconds(date) {
+    var utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
+    utcDate.setUTCFullYear(date.getFullYear());
+    return date.getTime() - utcDate.getTime();
+}
+exports.default = getTimezoneOffsetInMilliseconds;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"a6iyr":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _indexJs = require("../toDate/index.js");
+var _indexJsDefault = parcelHelpers.interopDefault(_indexJs);
+var _indexJs1 = require("../_lib/requiredArgs/index.js");
+var _indexJsDefault1 = parcelHelpers.interopDefault(_indexJs1);
+function eachDayOfInterval(dirtyInterval, options) {
+    var _options$step;
+    (0, _indexJsDefault1.default)(1, arguments);
+    var interval = dirtyInterval || {};
+    var startDate = (0, _indexJsDefault.default)(interval.start);
+    var endDate = (0, _indexJsDefault.default)(interval.end);
+    var endTime = endDate.getTime(); // Throw an exception if start date is after end date or if any date is `Invalid Date`
+    if (!(startDate.getTime() <= endTime)) throw new RangeError("Invalid interval");
+    var dates = [];
+    var currentDate = startDate;
+    currentDate.setHours(0, 0, 0, 0);
+    var step = Number((_options$step = options === null || options === void 0 ? void 0 : options.step) !== null && _options$step !== void 0 ? _options$step : 1);
+    if (step < 1 || isNaN(step)) throw new RangeError("`options.step` must be a number greater than 1");
+    while(currentDate.getTime() <= endTime){
+        dates.push((0, _indexJsDefault.default)(currentDate));
+        currentDate.setDate(currentDate.getDate() + step);
+        currentDate.setHours(0, 0, 0, 0);
+    }
+    return dates;
+}
+exports.default = eachDayOfInterval;
+
+},{"../toDate/index.js":"fsust","../_lib/requiredArgs/index.js":"9wUgQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5zQJ5":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _indexJs = require("../_lib/defaultOptions/index.js");
+var _indexJs1 = require("../toDate/index.js");
+var _indexJsDefault = parcelHelpers.interopDefault(_indexJs1);
+var _indexJs2 = require("../_lib/toInteger/index.js");
+var _indexJsDefault1 = parcelHelpers.interopDefault(_indexJs2);
+var _indexJs3 = require("../_lib/requiredArgs/index.js");
+var _indexJsDefault2 = parcelHelpers.interopDefault(_indexJs3);
+function endOfWeek(dirtyDate, options) {
+    var _ref, _ref2, _ref3, _options$weekStartsOn, _options$locale, _options$locale$optio, _defaultOptions$local, _defaultOptions$local2;
+    (0, _indexJsDefault2.default)(1, arguments);
+    var defaultOptions = (0, _indexJs.getDefaultOptions)();
+    var weekStartsOn = (0, _indexJsDefault1.default)((_ref = (_ref2 = (_ref3 = (_options$weekStartsOn = options === null || options === void 0 ? void 0 : options.weekStartsOn) !== null && _options$weekStartsOn !== void 0 ? _options$weekStartsOn : options === null || options === void 0 ? void 0 : (_options$locale = options.locale) === null || _options$locale === void 0 ? void 0 : (_options$locale$optio = _options$locale.options) === null || _options$locale$optio === void 0 ? void 0 : _options$locale$optio.weekStartsOn) !== null && _ref3 !== void 0 ? _ref3 : defaultOptions.weekStartsOn) !== null && _ref2 !== void 0 ? _ref2 : (_defaultOptions$local = defaultOptions.locale) === null || _defaultOptions$local === void 0 ? void 0 : (_defaultOptions$local2 = _defaultOptions$local.options) === null || _defaultOptions$local2 === void 0 ? void 0 : _defaultOptions$local2.weekStartsOn) !== null && _ref !== void 0 ? _ref : 0); // Test if weekStartsOn is between 0 and 6 _and_ is not NaN
+    if (!(weekStartsOn >= 0 && weekStartsOn <= 6)) throw new RangeError("weekStartsOn must be between 0 and 6 inclusively");
+    var date = (0, _indexJsDefault.default)(dirtyDate);
+    var day = date.getDay();
+    var diff = (day < weekStartsOn ? -7 : 0) + 6 - (day - weekStartsOn);
+    date.setDate(date.getDate() + diff);
+    date.setHours(23, 59, 59, 999);
+    return date;
+}
+exports.default = endOfWeek;
+
+},{"../_lib/defaultOptions/index.js":"dWs8l","../toDate/index.js":"fsust","../_lib/toInteger/index.js":"f7kKX","../_lib/requiredArgs/index.js":"9wUgQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lnm6V":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _indexJs = require("../isValid/index.js");
@@ -2443,20 +2587,7 @@ function startOfUTCWeek(dirtyDate, options) {
 }
 exports.default = startOfUTCWeek;
 
-},{"../../toDate/index.js":"fsust","../requiredArgs/index.js":"9wUgQ","../toInteger/index.js":"f7kKX","../defaultOptions/index.js":"dWs8l","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dWs8l":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "getDefaultOptions", ()=>getDefaultOptions);
-parcelHelpers.export(exports, "setDefaultOptions", ()=>setDefaultOptions);
-var defaultOptions = {};
-function getDefaultOptions() {
-    return defaultOptions;
-}
-function setDefaultOptions(newOptions) {
-    defaultOptions = newOptions;
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bJAVl":[function(require,module,exports) {
+},{"../../toDate/index.js":"fsust","../requiredArgs/index.js":"9wUgQ","../toInteger/index.js":"f7kKX","../defaultOptions/index.js":"dWs8l","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bJAVl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _indexJs = require("../getUTCWeekYear/index.js");
@@ -2690,16 +2821,6 @@ var longFormatters = {
     P: dateTimeLongFormatter
 };
 exports.default = longFormatters;
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bc74C":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-function getTimezoneOffsetInMilliseconds(date) {
-    var utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
-    utcDate.setUTCFullYear(date.getFullYear());
-    return date.getTime() - utcDate.getTime();
-}
-exports.default = getTimezoneOffsetInMilliseconds;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4R0Xq":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -3394,7 +3515,26 @@ function buildMatchPatternFn(args) {
 }
 exports.default = buildMatchPatternFn;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5eSfl":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"d31S3":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _indexJs = require("../toDate/index.js");
+var _indexJsDefault = parcelHelpers.interopDefault(_indexJs);
+var _indexJs1 = require("../_lib/requiredArgs/index.js");
+var _indexJsDefault1 = parcelHelpers.interopDefault(_indexJs1);
+function getDaysInMonth(dirtyDate) {
+    (0, _indexJsDefault1.default)(1, arguments);
+    var date = (0, _indexJsDefault.default)(dirtyDate);
+    var year = date.getFullYear();
+    var monthIndex = date.getMonth();
+    var lastDayOfMonth = new Date(0);
+    lastDayOfMonth.setFullYear(year, monthIndex + 1, 0);
+    lastDayOfMonth.setHours(0, 0, 0, 0);
+    return lastDayOfMonth.getDate();
+}
+exports.default = getDaysInMonth;
+
+},{"../toDate/index.js":"fsust","../_lib/requiredArgs/index.js":"9wUgQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5eSfl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _indexJs = require("../_lib/defaultOptions/index.js");
@@ -3415,7 +3555,41 @@ function assign(target, object) {
 }
 exports.default = assign;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6xvSk":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jaE4J":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _indexJs = require("../differenceInCalendarWeeks/index.js");
+var _indexJsDefault = parcelHelpers.interopDefault(_indexJs);
+var _indexJs1 = require("../lastDayOfMonth/index.js");
+var _indexJsDefault1 = parcelHelpers.interopDefault(_indexJs1);
+var _indexJs2 = require("../startOfMonth/index.js");
+var _indexJsDefault2 = parcelHelpers.interopDefault(_indexJs2);
+var _indexJs3 = require("../_lib/requiredArgs/index.js");
+var _indexJsDefault3 = parcelHelpers.interopDefault(_indexJs3);
+function getWeeksInMonth(date, options) {
+    (0, _indexJsDefault3.default)(1, arguments);
+    return (0, _indexJsDefault.default)((0, _indexJsDefault1.default)(date), (0, _indexJsDefault2.default)(date), options) + 1;
+}
+exports.default = getWeeksInMonth;
+
+},{"../differenceInCalendarWeeks/index.js":"7Le9T","../lastDayOfMonth/index.js":"6a7AM","../startOfMonth/index.js":"6xvSk","../_lib/requiredArgs/index.js":"9wUgQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6a7AM":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _indexJs = require("../toDate/index.js");
+var _indexJsDefault = parcelHelpers.interopDefault(_indexJs);
+var _indexJs1 = require("../_lib/requiredArgs/index.js");
+var _indexJsDefault1 = parcelHelpers.interopDefault(_indexJs1);
+function lastDayOfMonth(dirtyDate) {
+    (0, _indexJsDefault1.default)(1, arguments);
+    var date = (0, _indexJsDefault.default)(dirtyDate);
+    var month = date.getMonth();
+    date.setFullYear(date.getFullYear(), month + 1, 0);
+    date.setHours(0, 0, 0, 0);
+    return date;
+}
+exports.default = lastDayOfMonth;
+
+},{"../toDate/index.js":"fsust","../_lib/requiredArgs/index.js":"9wUgQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6xvSk":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _indexJs = require("../toDate/index.js");
@@ -3431,32 +3605,7 @@ function startOfMonth(dirtyDate) {
 }
 exports.default = startOfMonth;
 
-},{"../toDate/index.js":"fsust","../_lib/requiredArgs/index.js":"9wUgQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fD46d":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _indexJs = require("../toDate/index.js");
-var _indexJsDefault = parcelHelpers.interopDefault(_indexJs);
-var _indexJs1 = require("../_lib/toInteger/index.js");
-var _indexJsDefault1 = parcelHelpers.interopDefault(_indexJs1);
-var _indexJs2 = require("../_lib/requiredArgs/index.js");
-var _indexJsDefault2 = parcelHelpers.interopDefault(_indexJs2);
-var _indexJs3 = require("../_lib/defaultOptions/index.js");
-function startOfWeek(dirtyDate, options) {
-    var _ref, _ref2, _ref3, _options$weekStartsOn, _options$locale, _options$locale$optio, _defaultOptions$local, _defaultOptions$local2;
-    (0, _indexJsDefault2.default)(1, arguments);
-    var defaultOptions = (0, _indexJs3.getDefaultOptions)();
-    var weekStartsOn = (0, _indexJsDefault1.default)((_ref = (_ref2 = (_ref3 = (_options$weekStartsOn = options === null || options === void 0 ? void 0 : options.weekStartsOn) !== null && _options$weekStartsOn !== void 0 ? _options$weekStartsOn : options === null || options === void 0 ? void 0 : (_options$locale = options.locale) === null || _options$locale === void 0 ? void 0 : (_options$locale$optio = _options$locale.options) === null || _options$locale$optio === void 0 ? void 0 : _options$locale$optio.weekStartsOn) !== null && _ref3 !== void 0 ? _ref3 : defaultOptions.weekStartsOn) !== null && _ref2 !== void 0 ? _ref2 : (_defaultOptions$local = defaultOptions.locale) === null || _defaultOptions$local === void 0 ? void 0 : (_defaultOptions$local2 = _defaultOptions$local.options) === null || _defaultOptions$local2 === void 0 ? void 0 : _defaultOptions$local2.weekStartsOn) !== null && _ref !== void 0 ? _ref : 0); // Test if weekStartsOn is between 0 and 6 _and_ is not NaN
-    if (!(weekStartsOn >= 0 && weekStartsOn <= 6)) throw new RangeError("weekStartsOn must be between 0 and 6 inclusively");
-    var date = (0, _indexJsDefault.default)(dirtyDate);
-    var day = date.getDay();
-    var diff = (day < weekStartsOn ? 7 : 0) + day - weekStartsOn;
-    date.setDate(date.getDate() - diff);
-    date.setHours(0, 0, 0, 0);
-    return date;
-}
-exports.default = startOfWeek;
-
-},{"../toDate/index.js":"fsust","../_lib/toInteger/index.js":"f7kKX","../_lib/requiredArgs/index.js":"9wUgQ","../_lib/defaultOptions/index.js":"dWs8l","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iOhcx":[function(require,module,exports) {
+},{"../toDate/index.js":"fsust","../_lib/requiredArgs/index.js":"9wUgQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iOhcx":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "daysInWeek", ()=>daysInWeek);

@@ -42,9 +42,8 @@ grid.addEventListener('click', (event) => {
   // Then loop through all the other buttons and remove the class of 'selected'
   dates.forEach((date) => {
     // Don't remove the styling we just set for the newly selected date! 
-    if (date !== selectedDate) {
-      date.classList.remove('selected')
-    }
+    if (date === selectedDate) return
+    date.classList.remove('selected')
   })
 })
 
@@ -65,32 +64,70 @@ grid.addEventListener('click', (event) => {
 
 // Import some useful modules from the date-fns library
 // This Node module syntax is possible with Parcel
-import { getDefaultOptions, format, startOfWeek, startOfMonth } from 'date-fns'
+import { getDefaultOptions, format, startOfWeek, endOfWeek, startOfMonth, getDaysInMonth, lastDayOfMonth, getWeeksInMonth, eachDayOfInterval } from 'date-fns'
 
+// Use the imported library to format the current day and store it
 const formattedDate = format(new Date(), 'MMMM do, yyyy') // August 29th, 2022
-console.log(formattedDate)
 
 // Assign the current date in the proper format to our calendar date button
 dateButton.textContent = formattedDate;
 
+
 // Task 5 - Complete
 // Display the correct month and year in the header
+
+// Create a date format for our calendar header..
 const currentMonthYear = format(new Date(), "MMMM - yyyy")
 
+// ..and assign it to the header
 monthYearHeader.textContent = currentMonthYear
 
 
+// Task 6 - Use the current month and year to update the calendar with the correct dates
 
-// Built-in JS functions
-const currentDate = new Date();
-// console.log(currentDate) // Mon Aug 29 2022 13:50:13 GMT-0500 (Central Daylight Time)
-const currentYearValue = currentDate.getFullYear() // 2022
-const currentMonthValue = currentDate.getMonth() // 7
-const currentDayOfWeekValue = currentDate.getDay() // 1 (Monday)
-const currentDayOfMonthValue = currentDate.getDate() // 29
+// Task 7 - Allow the user to toggle the month with left and right month buttons
 
-const firstDayOfCurrentMonth = startOfMonth(new Date())
-// console.log(firstDayOfCurrentMonth) // Mon Aug 01 2022 00:00:00 GMT-0500 (Central Daylight Time)
+// Task 8 - Make sure the calendar date button updates with the new date when the user picks a different date. 
 
-const firstDayOfCurrentWeek = startOfWeek(new Date())
-// console.log(firstDayOfCurrentWeek) // Sun Aug 28 2022 00:00:00 GMT-0500 (Central Daylight Time)
+/// CURRENT WORKSPACE ///
+
+
+// console.log(currentDate)
+const today = new Date();
+const currentYear = today.getFullYear() 
+const currentMonth = today.getMonth() 
+const currentDayOfMonth = today.getDate() 
+const currentDayOfWeek = today.getDay()
+
+const numberOfDaysInCurrentMonth = getDaysInMonth(today)
+
+const firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
+console.dir(firstDayOfFirstWeek)
+
+const lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
+console.dir(lastDayOfLastWeek)
+
+allDays = eachDayOfInterval({
+  start: firstDayOfFirstWeek,
+  end: lastDayOfLastWeek
+})
+console.dir(allDays)
+
+// Creates an array of all the days of August of the form:
+// Mon Aug 01 2022 00:00:00 GMT-0500 (Central Daylight Time)
+// const allAugustDays = eachDayOfInterval({
+  //   start: new Date(2022, 7, 1),
+  //   end: new Date(2022, 7, 31)
+  // })
+  // console.dir(allAugustDays)
+  
+  // const firstDayOfAugust = allAugustDays[0]
+  // console.dir(firstDayOfAugust)
+  // console.dir(firstDayOfAugust.getDay())
+  
+  // const weeksInCurrentMonth = getWeeksInMonth(today)
+  // const currentDate = new Date(currentYear, currentMonth, currentDayOfMonth);
+  
+  
+
+
