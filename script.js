@@ -18,7 +18,9 @@ const dateButton = container.querySelector('.date-picker-button');
 const calendar = container.querySelector('.date-picker')
 const grid = calendar.querySelector('.date-picker-grid-dates')
 const dates = grid.querySelectorAll('.date')
+const datesRowSix = grid.querySelectorAll('.rowSix')
 const monthYearHeader = calendar.querySelector('.current-month')
+
 
 // Task 1 - Complete 
 // Allow the user to toggle the visibility of the calendar with the button
@@ -92,40 +94,42 @@ monthYearHeader.textContent = currentMonthYear
 /// CURRENT WORKSPACE ///
 
 
-// console.log(currentDate)
+// Get the current day by creating a new instance of the Date class
 const today = new Date();
+// Store the current year, month and last day of the current month
 const currentYear = today.getFullYear() 
-const currentMonth = today.getMonth() 
-const currentDayOfMonth = today.getDate() 
-const currentDayOfWeek = today.getDay()
-
+const currentMonth = today.getMonth()
 const numberOfDaysInCurrentMonth = getDaysInMonth(today)
-
+// Using these three pieces, find and store the first and last day in the grid
 const firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
-console.dir(firstDayOfFirstWeek)
-
 const lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
-console.dir(lastDayOfLastWeek)
-
+// Using these beginning and ending dates, create an array of all the days (Date objects) in the current month's calendar grid (35 or 42 items depending on if the month spans 6 weeks)
 allDays = eachDayOfInterval({
   start: firstDayOfFirstWeek,
   end: lastDayOfLastWeek
 })
-console.dir(allDays)
+// Extract and store the literal date numbers from the 35 or 42 days in the month grid
+const allDaysNumbers = []
+allDays.forEach((day) => {
+  // Get the date from the current day and add it to the array
+  allDaysNumbers.push(day.getDate())
+})
+// Before applying dates, hide the sixth row if its not needed
+const weeksInCurrentMonth = getWeeksInMonth(today)
+if (weeksInCurrentMonth < 6) {
+  datesRowSix.forEach((day) => {
+    day.classList.add('hide')
+  })
+}
 
-// Creates an array of all the days of August of the form:
-// Mon Aug 01 2022 00:00:00 GMT-0500 (Central Daylight Time)
-// const allAugustDays = eachDayOfInterval({
-  //   start: new Date(2022, 7, 1),
-  //   end: new Date(2022, 7, 31)
-  // })
-  // console.dir(allAugustDays)
+// Apply the correct dates to the calendar buttons
+for (i = 0; i < allDaysNumbers.length; i++) {
+  dates[i].textContent = allDaysNumbers[i]
+}
+
+
+
   
-  // const firstDayOfAugust = allAugustDays[0]
-  // console.dir(firstDayOfAugust)
-  // console.dir(firstDayOfAugust.getDay())
-  
-  // const weeksInCurrentMonth = getWeeksInMonth(today)
   // const currentDate = new Date(currentYear, currentMonth, currentDayOfMonth);
   
   
