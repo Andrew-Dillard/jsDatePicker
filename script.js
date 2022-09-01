@@ -36,7 +36,6 @@ dateButton.addEventListener('click', () => {
 
 // Add a click event listener to the grid of dates
 grid.addEventListener('click', (event) => {
-  console.log('clicked on grid')
   // Grab the button the user selected..
   const selectedDate = event.target
   // ..and toggle the 'selected' class to add blue highlighting
@@ -93,6 +92,7 @@ const today = new Date();
 // Store the current year, month and last day of the current month
 const currentYear = today.getFullYear() 
 const currentMonth = today.getMonth()
+const currentDay = today.getDate()
 const numberOfDaysInCurrentMonth = getDaysInMonth(today)
 // Using these three pieces, find and store the first and last day in the grid
 const firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
@@ -121,15 +121,11 @@ for (i = 0; i < allDaysNumbers.length; i++) {
   dates[i].textContent = allDaysNumbers[i]
 }
 
-// Task 7 - Add grayed out styling to dates that are not part of the current month
 
-/// CURRENT WORKSPACE ///
+// Task 7 - Complete
+// Add grayed out styling to dates that are not part of the current month
 
-console.dir(allDays)
-
-// Create an array mapping the 35 or 42 days to their month
-// console.dir(allDays[1].getMonth() === currentMonth) // true
-
+// Create an array of booleans indicating each day's membership in current month or not
 const areDaysPartOfMonth = []
 allDays.forEach((day) => {
   if (day.getMonth() === currentMonth) {
@@ -138,15 +134,38 @@ allDays.forEach((day) => {
     areDaysPartOfMonth.push(false)
   }
 })
-console.dir(areDaysPartOfMonth)
+// console.dir(areDaysPartOfMonth)
 
-
+// Loop through our booleans, changing styling for dates not in the current month
 for (i = 0; i < areDaysPartOfMonth.length; i++) {
+  // For true values,  continue  means start the loop again on the next item
   if (areDaysPartOfMonth[i] === true) continue
   dates[i].classList.add('date-picker-other-month-date')
 }
 
 
-// Task 8 - Allow the user to toggle the month with left and right month buttons
+// Task 8 - Complete
+// The current date should start off with the selected blue styling
+
+// loop through all of our days looking for the current date, and give it the blue selected style
+for (i = 0; i < allDays.length; i++) {
+  if (
+    allDays[i].getDate() === currentDay &&
+    allDays[i].getMonth() === currentMonth
+  ) {
+    dates[i].classList.add('selected')
+  }
+}
+  
 
 // Task 9 - Make sure the calendar date button updates with the new date when the user picks a different date. 
+
+/// CURRENT WORKSPACE ///
+
+
+
+
+
+
+
+// Task 10 - Allow the user to toggle the month with left and right month buttons
