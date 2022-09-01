@@ -532,24 +532,14 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"6rimH":[function(require,module,exports) {
-// Right now, October 26th, 2020 is hard-coded into the HTML date <button>
-// We will use JavaScript to change the textContent of that button and update it when the user picks a new date. 
-// While we could use the current October 2020 hard-coded values in the date buttons to update the calendar date button, that would limit the program to one month which is not ideal. We also have to figure out how to format and display the date which is no easy task in JavaScript.
-// Recall one of our specifications is to allow the user to change months with left and right buttons. Doing so will change the textContent of the individual buttons themselves. 
-// Therefore, we will utilize the  date-fns  library to populate the calendar with the correct values when the user presses the month buttons. We will also use it to format the updated date in the calendar date button.
-// Task 4 - Complete
-// Display the current date upon page load in the calendar date button
-// Import some useful modules from the date-fns library
-// This Node module syntax is possible with Parcel
-var _dateFns = require("date-fns");
 // Lesson 73 - Date Picker
 // We will be building a fully functional date picker given some starting HTML and CSS using a library called  date-fns
-// Specifications:
-// Upon entering, the user only sees a button with the current date. When the user clicks the button, a calendar beneath the button appears highlighting the current date. 
-// When the user uses the calendar to select a different date, the calendar disappears and the button's date changes to the user's selection. 
-// When the user selects the button again, the calendar appears once again, this time highlighting the most recent user selection. 
-// The user has left and right month buttons at the top corners of the calendar to change the month
-// The Month and Year will be displayed at the top center of the calendar and will change as needed as the user interacts with the month buttons. 
+// STEP1
+// Import necessary modules from the date-fns library
+// NOTE: This Node module syntax is possible with Parcel
+var _dateFns = require("date-fns");
+// STEP2
+// Declare and define variables to hold the HTML elements that will be modified
 const container = document.querySelector(".date-picker-container");
 const dateButton = container.querySelector(".date-picker-button");
 const calendar = container.querySelector(".date-picker");
@@ -557,60 +547,38 @@ const grid = calendar.querySelector(".date-picker-grid-dates");
 const dates = grid.querySelectorAll(".date");
 const datesRowSix = grid.querySelectorAll(".rowSix");
 const monthYearHeader = calendar.querySelector(".current-month");
-// Task 1 - Complete 
-// Allow the user to toggle the visibility of the calendar with the button
-dateButton.addEventListener("click", ()=>{
-    calendar.classList.toggle("show");
-});
-// Task 2 - Complete
-// Make the calendar hidden upon page load (done in the HTML by removing show class to begin with)
-// Task 3 - Complete
-// Change the blue highlight styling to the new date the user picks and remove the styling from the previously selected date
-// Add a click event listener to the grid of dates
-grid.addEventListener("click", (event)=>{
-    // Grab the button the user selected..
-    const selectedDate = event.target;
-    // ..and toggle the 'selected' class to add blue highlighting
-    selectedDate.classList.toggle("selected");
-    // Then loop through all the other buttons and remove the class of 'selected'
-    dates.forEach((date)=>{
-        // Don't remove the styling we just set for the newly selected date! 
-        if (date === selectedDate) return;
-        date.classList.remove("selected");
-    });
-});
-// Use the imported library to format the current day and store it
-const formattedDate = (0, _dateFns.format)(new Date(), "MMMM do, yyyy") // August 29th, 2022
-;
-// Assign the current date in the proper format to our calendar date button
-dateButton.textContent = formattedDate;
-// Task 5 - Complete
-// Display the correct month and year in the header
-// Create a date format for our calendar header..
-const currentMonthYear = (0, _dateFns.format)(new Date(), "MMMM - yyyy");
-// ..and assign it to the header
-monthYearHeader.textContent = currentMonthYear;
-// Task 6 - Complete
-// Use the current month and year to update the calendar with the correct dates
+const previousMonthButton = calendar.querySelector(".prev-month-button");
+const nextMonthButton = calendar.querySelector(".next-month-button");
+// STEP3
+// Use The current date to declare and define variables to hold the current year, month, day, and number of days in the current month. 
 // Get the current day by creating a new instance of the Date class
 const today = new Date();
-// Store the current year, month and last day of the current month
-const currentYear = today.getFullYear();
-const currentMonth = today.getMonth();
-const currentDay = today.getDate();
-const numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(today);
-// Using these three pieces, find and store the first and last day in the grid
-const firstDayOfFirstWeek = (0, _dateFns.startOfWeek)(new Date(currentYear, currentMonth));
-const lastDayOfLastWeek = (0, _dateFns.endOfWeek)(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth));
+let currentYear = today.getFullYear();
+let currentMonth = today.getMonth();
+let currentDay = today.getDate();
+let numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(today);
+// STEP4
+// Display the current date in the proper format to our calendar date button
+const formattedDate = (0, _dateFns.format)(new Date(currentYear, currentMonth, currentDay), "MMMM do, yyyy") // August 29th, 2022
+;
+dateButton.textContent = formattedDate;
+// STEP5
+// Display the correctly formatted month and year in the header
+const currentMonthYear = (0, _dateFns.format)(new Date(currentYear, currentMonth), "MMMM - yyyy");
+monthYearHeader.textContent = currentMonthYear;
+// STEP6
+// Update the calendar with the correct dates
+// Find and store the first and last day in the grid
+let firstDayOfFirstWeek = (0, _dateFns.startOfWeek)(new Date(currentYear, currentMonth));
+let lastDayOfLastWeek = (0, _dateFns.endOfWeek)(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth));
 // Using these beginning and ending dates, create an array of all the days (Date objects) in the current month's calendar grid (35 or 42 items depending on if the month spans 6 weeks)
 allDays = (0, _dateFns.eachDayOfInterval)({
     start: firstDayOfFirstWeek,
     end: lastDayOfLastWeek
 });
 // Extract and store the literal date numbers from the 35 or 42 days in the month grid
-const allDaysNumbers = [];
+let allDaysNumbers = [];
 allDays.forEach((day)=>{
-    // Get the date from the current day and add it to the array
     allDaysNumbers.push(day.getDate());
 });
 // Before applying dates, hide the sixth row if its not needed
@@ -620,7 +588,6 @@ if (weeksInCurrentMonth < 6) datesRowSix.forEach((day)=>{
 });
 // Apply the correct dates to the calendar buttons
 for(i = 0; i < allDaysNumbers.length; i++)dates[i].textContent = allDaysNumbers[i];
-// Task 7 - Complete
 // Add grayed out styling to dates that are not part of the current month
 // Create an array of booleans indicating each day's membership in current month or not
 const areDaysPartOfMonth = [];
@@ -635,15 +602,37 @@ for(i = 0; i < areDaysPartOfMonth.length; i++){
     if (areDaysPartOfMonth[i] === true) continue;
     dates[i].classList.add("date-picker-other-month-date");
 }
-// Task 8 - Complete
 // The current date should start off with the selected blue styling
 // loop through all of our days looking for the current date, and give it the blue selected style
 for(i = 0; i < allDays.length; i++)if (allDays[i].getDate() === currentDay && allDays[i].getMonth() === currentMonth && allDays[i].getFullYear() === currentYear) dates[i].classList.add("selected");
-// Task 9 - Make sure the calendar date button updates with the new date when the user picks a different date. 
+// TASKS: 
+// 1. Allow the user to toggle the month with left and right month buttons
+// 2. Update the header when the user changes the date
 /// CURRENT WORKSPACE ///
-// Create a second click event listener on the grid of dates
+previousMonthButton.addEventListener("click", ()=>{});
+// Event listeners
+// Allow the user to toggle the visibility of the calendar with the button
+dateButton.addEventListener("click", ()=>{
+    calendar.classList.toggle("show");
+});
+// Change the blue highlight styling to the new date the user picks and remove the styling from the previously selected date
+// Add a click event listener to the grid of dates
+grid.addEventListener("click", (event)=>{
+    // Grab the button the user selected..
+    const selectedDate = event.target;
+    // ..and toggle the 'selected' class to add blue highlighting
+    selectedDate.classList.toggle("selected");
+    // Then loop through all the other buttons and remove the class of 'selected'
+    dates.forEach((date)=>{
+        // Don't remove the styling we just set for the newly selected date! 
+        if (date === selectedDate) return;
+        date.classList.remove("selected");
+    });
+});
+// Make sure the calendar date button updates with the new date when the user picks a different date. 
+// When the user selects a date on the calendar..
 grid.addEventListener("click", ()=>{
-    // loop through our date buttons..
+    // ..loop through our date buttons..
     for(i = 0; i < dates.length; i++)// ..find the index of the button with the class of 'selected'..
     if (dates[i].classList.contains("selected")) {
         // and use that index to access the associated Date object, extracting its year, month, and date
@@ -655,8 +644,7 @@ grid.addEventListener("click", ()=>{
         // ..and update the calendar button
         dateButton.textContent = formattedDate;
     }
-}) // Task 10 - Allow the user to toggle the month with left and right month buttons
-;
+});
 
 },{"date-fns":"9yHCA"}],"9yHCA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
