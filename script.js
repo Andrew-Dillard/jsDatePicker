@@ -151,21 +151,35 @@ for (i = 0; i < areDaysPartOfMonth.length; i++) {
 for (i = 0; i < allDays.length; i++) {
   if (
     allDays[i].getDate() === currentDay &&
-    allDays[i].getMonth() === currentMonth
+    allDays[i].getMonth() === currentMonth &&
+    allDays[i].getFullYear() === currentYear
   ) {
     dates[i].classList.add('selected')
   }
 }
-  
+
 
 // Task 9 - Make sure the calendar date button updates with the new date when the user picks a different date. 
 
 /// CURRENT WORKSPACE ///
 
-
-
-
-
+// Create a second click event listener on the grid of dates
+grid.addEventListener('click', () => {
+  // loop through our date buttons..
+  for (i = 0; i < dates.length; i++) {
+    // ..find the index of the button with the class of 'selected'..
+    if (dates[i].classList.contains('selected')) {
+      // and use that index to access the associated Date object, extracting its year, month, and date
+      let year = allDays[i].getFullYear()
+      let month = allDays[i].getMonth()
+      let day = allDays[i].getDate()
+      // Use these three pieces to format the date..
+      let formattedDate = format(new Date(year, month, day), 'MMMM do, yyyy')
+      // ..and update the calendar button
+      dateButton.textContent = formattedDate;
+    }
+  }
+})
 
 
 // Task 10 - Allow the user to toggle the month with left and right month buttons

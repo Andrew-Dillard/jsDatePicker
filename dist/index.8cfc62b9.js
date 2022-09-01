@@ -638,10 +638,25 @@ for(i = 0; i < areDaysPartOfMonth.length; i++){
 // Task 8 - Complete
 // The current date should start off with the selected blue styling
 // loop through all of our days looking for the current date, and give it the blue selected style
-for(i = 0; i < allDays.length; i++)if (allDays[i].getDate() === currentDay && allDays[i].getMonth() === currentMonth) dates[i].classList.add("selected");
- // Task 9 - Make sure the calendar date button updates with the new date when the user picks a different date. 
- /// CURRENT WORKSPACE ///
- // Task 10 - Allow the user to toggle the month with left and right month buttons
+for(i = 0; i < allDays.length; i++)if (allDays[i].getDate() === currentDay && allDays[i].getMonth() === currentMonth && allDays[i].getFullYear() === currentYear) dates[i].classList.add("selected");
+// Task 9 - Make sure the calendar date button updates with the new date when the user picks a different date. 
+/// CURRENT WORKSPACE ///
+// Create a second click event listener on the grid of dates
+grid.addEventListener("click", ()=>{
+    // loop through our date buttons..
+    for(i = 0; i < dates.length; i++)// ..find the index of the button with the class of 'selected'..
+    if (dates[i].classList.contains("selected")) {
+        // and use that index to access the associated Date object, extracting its year, month, and date
+        let year = allDays[i].getFullYear();
+        let month = allDays[i].getMonth();
+        let day = allDays[i].getDate();
+        // Use these three pieces to format the date..
+        let formattedDate = (0, _dateFns.format)(new Date(year, month, day), "MMMM do, yyyy");
+        // ..and update the calendar button
+        dateButton.textContent = formattedDate;
+    }
+}) // Task 10 - Allow the user to toggle the month with left and right month buttons
+;
 
 },{"date-fns":"9yHCA"}],"9yHCA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
