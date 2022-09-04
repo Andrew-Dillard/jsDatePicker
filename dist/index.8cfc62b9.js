@@ -550,7 +550,7 @@ const monthYearHeader = calendar.querySelector(".current-month");
 const previousMonthButton = calendar.querySelector(".prev-month-button");
 const nextMonthButton = calendar.querySelector(".next-month-button");
 // STEP3
-// Use The current date to declare and define variables to hold the current year, month, day, and number of days in the current month. 
+// Use The current date to declare and define variables to hold the current year, month, day, and number of days in the current month.
 // Get the current day by creating a new instance of the Date class
 const today = new Date();
 let currentYear = today.getFullYear();
@@ -568,26 +568,27 @@ const currentMonthYear = (0, _dateFns.format)(new Date(currentYear, currentMonth
 monthYearHeader.textContent = currentMonthYear;
 // STEP6
 // Update the calendar with the correct dates
-// Find and store the first and last day in the grid
+// STEP6.1 - Find and store the first and last day in the grid
 let firstDayOfFirstWeek = (0, _dateFns.startOfWeek)(new Date(currentYear, currentMonth));
 let lastDayOfLastWeek = (0, _dateFns.endOfWeek)(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth));
-// Using these beginning and ending dates, create an array of all the days (Date objects) in the current month's calendar grid (35 or 42 items depending on if the month spans 6 weeks)
+// STEP56.2 - Create an array of all the days (Date objects) in the current month's calendar grid (35 or 42 items depending on if the month spans 6 weeks) using these beginning and ending dates.
 allDays = (0, _dateFns.eachDayOfInterval)({
     start: firstDayOfFirstWeek,
     end: lastDayOfLastWeek
 });
-// Extract and store the literal date numbers from the 35 or 42 days in the month grid
+// STEP6.3 - Extract and store the literal date numbers from the 35 or 42 days in the month grid
 let allDaysNumbers = [];
 allDays.forEach((day)=>{
     allDaysNumbers.push(day.getDate());
 });
-// Before applying dates, hide the sixth row if its not needed
-const weeksInCurrentMonth = (0, _dateFns.getWeeksInMonth)(today);
+// STEP6.4 - Before applying dates, hide the sixth row if its not needed
+const weeksInCurrentMonth = (0, _dateFns.getWeeksInMonth)(new Date(currentYear, currentMonth, currentDay));
 if (weeksInCurrentMonth < 6) datesRowSix.forEach((day)=>{
     day.classList.add("hide");
 });
-// Apply the correct dates to the calendar buttons
+// STEP 6.5 - Apply the correct dates to the calendar buttons
 for(i = 0; i < allDaysNumbers.length; i++)dates[i].textContent = allDaysNumbers[i];
+// STEP7 
 // Add grayed out styling to dates that are not part of the current month
 // Create an array of booleans indicating each day's membership in current month or not
 const areDaysPartOfMonth = [];
@@ -595,26 +596,35 @@ allDays.forEach((day)=>{
     if (day.getMonth() === currentMonth) areDaysPartOfMonth.push(true);
     else areDaysPartOfMonth.push(false);
 });
-// console.dir(areDaysPartOfMonth)
 // Loop through our booleans, changing styling for dates not in the current month
 for(i = 0; i < areDaysPartOfMonth.length; i++){
     // For true values,  continue  means start the loop again on the next item
     if (areDaysPartOfMonth[i] === true) continue;
     dates[i].classList.add("date-picker-other-month-date");
 }
-// The current date should start off with the selected blue styling
-// loop through all of our days looking for the current date, and give it the blue selected style
+// STEP 8
+// Blue highlight the current date
+// Loop through all of our days looking for the current date, and give it the blue selected style
 for(i = 0; i < allDays.length; i++)if (allDays[i].getDate() === currentDay && allDays[i].getMonth() === currentMonth && allDays[i].getFullYear() === currentYear) dates[i].classList.add("selected");
-// TASKS: 
-// 1. Allow the user to toggle the month with left and right month buttons
-// 2. Update the header when the user changes the date
+// STEP 9
+// Cause calendar to disappear when the user picks a date
+dates.forEach((date)=>{
+    date.addEventListener("click", ()=>{
+        calendar.classList.toggle("show");
+    });
+});
 /// CURRENT WORKSPACE ///
+// TASKS: 
+// When the user clicks the calendar button, the date's month that is shown in that button should be displayed in the calendar
+// Allow the user to toggle the month with left and right month buttons
 previousMonthButton.addEventListener("click", ()=>{});
 // Event listeners
+// HANDLER1
 // Allow the user to toggle the visibility of the calendar with the button
 dateButton.addEventListener("click", ()=>{
     calendar.classList.toggle("show");
 });
+// HANDLER2
 // Change the blue highlight styling to the new date the user picks and remove the styling from the previously selected date
 // Add a click event listener to the grid of dates
 grid.addEventListener("click", (event)=>{
@@ -629,6 +639,7 @@ grid.addEventListener("click", (event)=>{
         date.classList.remove("selected");
     });
 });
+// HANDLER3
 // Make sure the calendar date button updates with the new date when the user picks a different date. 
 // When the user selects a date on the calendar..
 grid.addEventListener("click", ()=>{
