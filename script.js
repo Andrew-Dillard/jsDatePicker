@@ -38,102 +38,9 @@ const formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'M
 dateButton.textContent = formattedDate;
 
 
-
-
-// // STEP5
-// // Display the correctly formatted month and year in the header
-// const currentMonthYear = format(new Date(currentYear, currentMonth), "MMMM - yyyy")
-// monthYearHeader.textContent = currentMonthYear
-
-
-// // STEP6
-// // Update the calendar with the correct dates
-
-// // STEP6.1 - Find and store the first and last day in the grid
-// let firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
-// let lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
-// // STEP56.2 - Create an array of all the days (Date objects) in the current month's calendar grid (35 or 42 items depending on if the month spans 6 weeks) using these beginning and ending dates.
-// allDays = eachDayOfInterval({
-//   start: firstDayOfFirstWeek,
-//   end: lastDayOfLastWeek
-// })
-// // STEP6.3 - Extract and store the literal date numbers from the 35 or 42 days in the month grid
-// let allDaysNumbers = []
-// allDays.forEach((day) => {
-//   allDaysNumbers.push(day.getDate())
-// })
-// // STEP6.4 - Before applying dates, hide the sixth row if its not needed
-// const weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
-// if (weeksInCurrentMonth < 6) {
-//   datesRowSix.forEach((day) => {
-//     day.classList.add('hide')
-//   })
-// }
-// // STEP 6.5 - Apply the correct dates to the calendar buttons
-// for (i = 0; i < allDaysNumbers.length; i++) {
-//   dates[i].textContent = allDaysNumbers[i]
-// }
-
-
-// // STEP7 
-// // Add grayed out styling to dates that are not part of the current month
-
-// // Create an array of booleans indicating each day's membership in current month or not
-// const areDaysPartOfMonth = []
-// allDays.forEach((day) => {
-//   if (day.getMonth() === currentMonth) {
-//     areDaysPartOfMonth.push(true)
-//   } else  {
-//     areDaysPartOfMonth.push(false)
-//   }
-// })
-// // Loop through our booleans, changing styling for dates not in the current month
-// for (i = 0; i < areDaysPartOfMonth.length; i++) {
-//   // For true values,  continue  means start the loop again on the next item
-//   if (areDaysPartOfMonth[i] === true) continue
-//   dates[i].classList.add('date-picker-other-month-date')
-// }
-
-
-// // STEP 8
-// // Blue highlight the current date
-
-// // Loop through all of our days looking for the current date, and give it the blue selected style
-// for (i = 0; i < allDays.length; i++) {
-//   if (
-//     allDays[i].getDate() === currentDay &&
-//     allDays[i].getMonth() === currentMonth &&
-//     allDays[i].getFullYear() === currentYear
-//   ) {
-//     dates[i].classList.add('selected')
-//   }
-// }
-
-
-
-
-
-// STEP 9
-
-
-/// CURRENT WORKSPACE ///
-
-// TASKS: 
-
-// When the user clicks the calendar button, render associated month
 // Allow the user to toggle the month with left and right month buttons
 
 // BUG: Clicking in the gap between dates deselects the selected date
-
-// The final step is to create a function that renders the calendar. 
-// This function should be run any time the user clicks:
-// 1. the calendar button
-// 2. one of the change month buttons
-
-
-// STEPS 5-8 needs to be encapsulated inside this function. Be careful to keep variables available
-// Begin by commenting out those steps, copy this code into this function, and place all variable declarations above the function declaration
-// currentYear, currentMonth, currentDay and numberOfDaysInCurrentMonth  need to be altered by the user and passed to this function when the users clicks a change month button
 
 // FUNCTIONS
 
@@ -141,9 +48,9 @@ dateButton.textContent = formattedDate;
 // The other time this function runs is when the user clicks a change month button
 
 
-let currentMonthYear = format(new Date(currentYear, currentMonth), "MMMM - yyyy")
-let firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
-let lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
+// let currentMonthYear = format(new Date(currentYear, currentMonth), "MMMM - yyyy")
+// let firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
+// let lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
 let allDays = []
 let allDaysNumbers = []
 let weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
@@ -151,56 +58,45 @@ let areDaysPartOfMonth = []
 
 
 
-
-
 function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth) {
 
-  console.log('renderCalendar() is running')
+  console.log('renderCalendar() has started running')
 
-  // Begin each function call with a fresh empty array
+  // Begin each function call with fresh empty arrays
   allDaysNumbers = []
+  allDays = []
 
-  // STEP5
-// Display the correctly formatted month and year in the header
-  // const currentMonthYear = format(new Date(currentYear, currentMonth), "MMMM - yyyy")
+  // Display the correctly formatted month and year in the header
+  let currentMonthYear = format(new Date(currentYear, currentMonth), "MMMM - yyyy")
   monthYearHeader.textContent = currentMonthYear
 
+  // Locate first and last day in the grid
+  let firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
+  let lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
 
-  // STEP6
-  // Update the calendar with the correct dates
-
-  // STEP6.1 - Find and store the first and last day in the grid
-  // let firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
-  // let lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
-  // STEP56.2 - Create an array of all the days (Date objects) in the current month's calendar grid (35 or 42 items depending on if the month spans 6 weeks) using these beginning and ending dates.
+  // Create an array of all the days (Date objects) in the current month's calendar grid (35 or 42 items depending on if the month spans 6 weeks) using these beginning and ending dates.
   allDays = eachDayOfInterval({
     start: firstDayOfFirstWeek,
     end: lastDayOfLastWeek
   })
-  // STEP6.3 - Extract and store the literal date numbers from the 35 or 42 days in the month grid
-  // let allDaysNumbers = []
+
+  // Extract and store the literal date numbers from the 35 or 42 days in the month grid
   allDays.forEach((day) => {
     allDaysNumbers.push(day.getDate())
   })
-  // STEP6.4 - Before applying dates, hide the sixth row if its not needed
-  // const weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
+
+  // Before applying dates, hide the sixth row if its not needed
   if (weeksInCurrentMonth < 6) {
     datesRowSix.forEach((day) => {
       day.classList.add('hide')
     })
   }
 
-  console.dir(dates)
-  console.dir(allDays)
-  console.dir(allDaysNumbers)
-
-  // STEP 6.5 - Apply the correct dates to the calendar buttons
+  // Apply the correct dates to the calendar buttons
   for (i = 0; i < allDaysNumbers.length; i++) {
     dates[i].textContent = allDaysNumbers[i]
   }
 
-
-  // STEP7 
   // Add grayed out styling to dates that are not part of the current month
 
   // Create an array of booleans indicating each day's membership in current month or not
@@ -214,17 +110,14 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
       areDaysPartOfMonth.push(false)
     }
   })
+
   // Loop through our booleans, changing styling for dates not in the current month
   for (i = 0; i < areDaysPartOfMonth.length; i++) {
     // For true values,  continue  means start the loop again on the next item
     if (areDaysPartOfMonth[i] === true) continue
-
-
     dates[i].classList.add('date-picker-other-month-date')
   }
 
-
-  // STEP 8
   // Blue highlight the current date
 
   // Loop through all of our days looking for the current date, and give it the blue selected style
@@ -247,14 +140,6 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
 
 // Event listeners
 
-dateButton.addEventListener('click', (event) => {
-  // Get inputs for renderCalendar()
-  console.log(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
-  console.dir(event.target)
-  renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
-  // Call renderCalendar() with user inputs
-})
-
 
 // Month selector handlers
 
@@ -268,10 +153,24 @@ nextMonthButton.addEventListener('click', () => {
 
 
 
+// When the user clicks the calendar button, 
+// 1. Toggle the visibility of the calendar
+// 2. Display correct month/year header
+// 3. Display correct date numbers
+// 4. Gray out days not in the current month
+// 5. Blue highlight the current date
+
+
+
 
 // HANDLER1
 // Allow the user to toggle the visibility of the calendar with the button
+// If the calendar is not visible, then run  renderCalendar()
 dateButton.addEventListener('click', () => {
+  if (!calendar.classList.contains('show')) {
+    renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
+    
+  }
   calendar.classList.toggle('show')
 })
 
@@ -287,6 +186,10 @@ dates.forEach((date) => {
 // Change the blue highlight styling to the new date the user picks and remove the styling from the previously selected date
 // Add a click event listener to the grid of dates
 grid.addEventListener('click', (event) => {
+
+  // Begin with no blue highlighting
+
+
   // Grab the button the user selected..
   const selectedDate = event.target
   // ..and toggle the 'selected' class to add blue highlighting
@@ -311,6 +214,14 @@ grid.addEventListener('click', () => {
       let year = allDays[i].getFullYear()
       let month = allDays[i].getMonth()
       let day = allDays[i].getDate()
+
+      // Update variables
+      currentYear = year
+      currentMonth = month
+      currentDay = day
+      numberOfDaysInCurrentMonth = getDaysInMonth(new Date(currentYear, currentMonth, currentDay))
+
+
       // Use these three pieces to format the date..
       let formattedDate = format(new Date(year, month, day), 'MMMM do, yyyy')
       // ..and update the calendar button
