@@ -576,6 +576,16 @@ let weeksInCurrentMonth = (0, _dateFns.getWeeksInMonth)(new Date(currentYear, cu
 let areDaysPartOfMonth = [];
 function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth) {
     console.log("renderCalendar() has started running");
+    // Update number of days in current month
+    numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(new Date(currentYear, currentMonth, currentDay));
+    // Update number of weeks in the month
+    weeksInCurrentMonth = (0, _dateFns.getWeeksInMonth)(new Date(currentYear, currentMonth, currentDay));
+    // Before applying dates, hide the sixth row if its not needed
+    // Remove any previous applications of hide class first
+    removeHideClass();
+    if (weeksInCurrentMonth !== 6) datesRowSix.forEach((day)=>{
+        day.classList.add("hide");
+    });
     // Begin each function call with fresh empty arrays
     allDaysNumbers = [];
     allDays = [];
@@ -617,12 +627,6 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     removeSelectedStyling();
     // Loop through all of our days looking for the current date, and give it the blue selected style
     for(i = 0; i < allDays.length; i++)if (allDays[i].getDate() === currentDay && allDays[i].getMonth() === currentMonth && allDays[i].getFullYear() === currentYear) dates[i].classList.add("selected");
-    // Before applying dates, hide the sixth row if its not needed
-    // Remove any previous applications of hide class first
-    removeHideClass();
-    if (weeksInCurrentMonth !== 6) datesRowSix.forEach((day)=>{
-        day.classList.add("hide");
-    });
     console.log("renderCalendar() is done running");
 }
 // Event listeners
@@ -633,16 +637,16 @@ previousMonthButton.addEventListener("click", ()=>{
         currentMonth = 11;
         currentYear = currentYear - 1;
     } else currentMonth = currentMonth - 1;
-    console.log(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth);
     renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth);
+    removeSelectedStyling();
 });
 nextMonthButton.addEventListener("click", ()=>{
     if (currentMonth === 11) {
         currentMonth = 0;
         currentYear = currentYear + 1;
     } else currentMonth = currentMonth + 1;
-    console.log(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth);
     renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth);
+    removeSelectedStyling();
 });
 // HANDLER1
 // Allow the user to toggle the visibility of the calendar with the button
@@ -653,11 +657,11 @@ dateButton.addEventListener("click", ()=>{
 });
 // HANDLER2
 // Cause calendar to disappear when the user picks a date
-// dates.forEach((date) => {
-//   date.addEventListener('click', () => {
-//     calendar.classList.toggle('show')
-//   })
-// })
+dates.forEach((date)=>{
+    date.addEventListener("click", ()=>{
+        calendar.classList.toggle("show");
+    });
+});
 // HANDLER3
 // Change the blue highlight styling to the new date the user picks and remove the styling from the previously selected date
 // Add a click event listener to the grid of dates
@@ -711,6 +715,7 @@ function removeGrayedOutStyling() {
     });
 }
 function removeHideClass() {
+    console.log("removeHideClass() running");
     datesRowSix.forEach((day)=>{
         day.classList.remove("hide");
     });

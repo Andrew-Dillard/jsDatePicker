@@ -62,6 +62,22 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
 
   console.log('renderCalendar() has started running')
 
+  // Update number of days in current month
+  numberOfDaysInCurrentMonth = getDaysInMonth(new Date(currentYear, currentMonth, currentDay))
+
+
+  // Update number of weeks in the month
+  weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
+
+  // Before applying dates, hide the sixth row if its not needed
+  // Remove any previous applications of hide class first
+  removeHideClass()
+  if (weeksInCurrentMonth !== 6) {
+    datesRowSix.forEach((day) => {
+      day.classList.add('hide')
+    })
+  }
+
   // Begin each function call with fresh empty arrays
   allDaysNumbers = []
   allDays = []
@@ -131,14 +147,7 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     }
   }
 
-   // Before applying dates, hide the sixth row if its not needed
-  // Remove any previous applications of hide class first
-  removeHideClass()
-  if (weeksInCurrentMonth !== 6) {
-    datesRowSix.forEach((day) => {
-      day.classList.add('hide')
-    })
-  }
+  
 
   console.log('renderCalendar() is done running')
 }
@@ -159,10 +168,9 @@ previousMonthButton.addEventListener('click', () => {
     currentMonth = currentMonth - 1
   }
 
-  console.log(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
   renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
+  removeSelectedStyling()
 })
-
 
 
 nextMonthButton.addEventListener('click', () => {
@@ -174,9 +182,8 @@ nextMonthButton.addEventListener('click', () => {
     currentMonth = currentMonth + 1
   }
 
-
-  console.log(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
   renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
+  removeSelectedStyling()
 })
 
 
@@ -194,11 +201,11 @@ dateButton.addEventListener('click', () => {
 
 // HANDLER2
 // Cause calendar to disappear when the user picks a date
-// dates.forEach((date) => {
-//   date.addEventListener('click', () => {
-//     calendar.classList.toggle('show')
-//   })
-// })
+dates.forEach((date) => {
+  date.addEventListener('click', () => {
+    calendar.classList.toggle('show')
+  })
+})
 
 // HANDLER3
 // Change the blue highlight styling to the new date the user picks and remove the styling from the previously selected date
@@ -269,6 +276,7 @@ function removeGrayedOutStyling() {
 }
 
 function removeHideClass() {
+  console.log('removeHideClass() running')
   datesRowSix.forEach((day) => {
     day.classList.remove('hide')
   })
