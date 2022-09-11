@@ -70,9 +70,6 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
   let currentMonthYear = format(new Date(currentYear, currentMonth), "MMMM - yyyy")
   monthYearHeader.textContent = currentMonthYear
 
-
-  console.log(`numberOfDaysInCurrentMonth: ${numberOfDaysInCurrentMonth}`)
-
   // Locate first and last day in the grid
   let firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
   let lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
@@ -88,9 +85,6 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
   allDays.forEach((day) => {
     allDaysNumbers.push(day.getDate())
   })
-  
-  console.log(allDaysNumbers)
-  
 
   // Apply the correct dates to the calendar buttons
   for (i = 0; i < allDaysNumbers.length; i++) {
@@ -140,9 +134,7 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
    // Before applying dates, hide the sixth row if its not needed
   // Remove any previous applications of hide class first
   removeHideClass()
-  console.log(weeksInCurrentMonth)
   if (weeksInCurrentMonth !== 6) {
-    console.log(true)
     datesRowSix.forEach((day) => {
       day.classList.add('hide')
     })
@@ -156,24 +148,36 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
 
 
 // Month selector handlers
+// BUG: All dates are grayed out when month buttons change the year
 
 previousMonthButton.addEventListener('click', () => {
-  // renderCalendar()
+
+  if (currentMonth === 0) {
+    currentMonth = 11
+    currentYear = currentYear - 1
+  } else {
+    currentMonth = currentMonth - 1
+  }
+
+  console.log(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
+  renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
 })
+
+
 
 nextMonthButton.addEventListener('click', () => {
-  // renderCalendar()
+
+  if (currentMonth === 11) {
+    currentMonth = 0
+    currentYear = currentYear + 1
+  } else {
+    currentMonth = currentMonth + 1
+  }
+
+
+  console.log(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
+  renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
 })
-
-
-
-// When the user clicks the calendar button, 
-// 1. Toggle the visibility of the calendar
-// 2. Display correct month/year header
-// 3. Display correct date numbers
-// 4. Gray out days not in the current month
-// 5. Blue highlight the current date
-
 
 
 
