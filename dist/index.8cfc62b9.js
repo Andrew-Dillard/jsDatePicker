@@ -582,6 +582,7 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     // Display the correctly formatted month and year in the header
     let currentMonthYear = (0, _dateFns.format)(new Date(currentYear, currentMonth), "MMMM - yyyy");
     monthYearHeader.textContent = currentMonthYear;
+    console.log(`numberOfDaysInCurrentMonth: ${numberOfDaysInCurrentMonth}`);
     // Locate first and last day in the grid
     let firstDayOfFirstWeek = (0, _dateFns.startOfWeek)(new Date(currentYear, currentMonth));
     let lastDayOfLastWeek = (0, _dateFns.endOfWeek)(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth));
@@ -594,10 +595,7 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     allDays.forEach((day)=>{
         allDaysNumbers.push(day.getDate());
     });
-    // Before applying dates, hide the sixth row if its not needed
-    if (weeksInCurrentMonth < 6) datesRowSix.forEach((day)=>{
-        day.classList.add("hide");
-    });
+    console.log(allDaysNumbers);
     // Apply the correct dates to the calendar buttons
     for(i = 0; i < allDaysNumbers.length; i++)dates[i].textContent = allDaysNumbers[i];
     // Add grayed out styling to dates that are not part of the current month
@@ -608,6 +606,8 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
         if (day.getMonth() === currentMonth) areDaysPartOfMonth.push(true);
         else areDaysPartOfMonth.push(false);
     });
+    // First, clear any old gray styling
+    removeGrayedOutStyling();
     // Loop through our booleans, changing styling for dates not in the current month
     for(i = 0; i < areDaysPartOfMonth.length; i++){
         // For true values,  continue  means start the loop again on the next item
@@ -615,10 +615,21 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
         dates[i].classList.add("date-picker-other-month-date");
     }
     // Blue highlight the current date
+    // Begin by clearing any previously selected dates
+    removeSelectedStyling();
     // Loop through all of our days looking for the current date, and give it the blue selected style
     for(i = 0; i < allDays.length; i++)if (allDays[i].getDate() === currentDay && allDays[i].getMonth() === currentMonth && allDays[i].getFullYear() === currentYear) dates[i].classList.add("selected");
+    // Before applying dates, hide the sixth row if its not needed
+    // Remove any previous applications of hide class first
+    removeHideClass();
+    console.log(weeksInCurrentMonth);
+    if (weeksInCurrentMonth !== 6) {
+        console.log(true);
+        datesRowSix.forEach((day)=>{
+            day.classList.add("hide");
+        });
+    }
     console.log("renderCalendar() is done running");
-//////// 
 }
 // Event listeners
 // Month selector handlers
@@ -643,16 +654,16 @@ dateButton.addEventListener("click", ()=>{
 });
 // HANDLER2
 // Cause calendar to disappear when the user picks a date
-dates.forEach((date)=>{
-    date.addEventListener("click", ()=>{
-        calendar.classList.toggle("show");
-    });
-});
+// dates.forEach((date) => {
+//   date.addEventListener('click', () => {
+//     calendar.classList.toggle('show')
+//   })
+// })
 // HANDLER3
 // Change the blue highlight styling to the new date the user picks and remove the styling from the previously selected date
 // Add a click event listener to the grid of dates
 grid.addEventListener("click", (event)=>{
-    // Begin with no blue highlighting
+    // Begin with no blue highlighting?
     // Grab the button the user selected..
     const selectedDate = event.target;
     // ..and toggle the 'selected' class to add blue highlighting
@@ -680,12 +691,31 @@ grid.addEventListener("click", ()=>{
         currentMonth = month;
         currentDay = day;
         numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(new Date(currentYear, currentMonth, currentDay));
+        weeksInCurrentMonth = (0, _dateFns.getWeeksInMonth)(new Date(currentYear, currentMonth, currentDay));
         // Use these three pieces to format the date..
         let formattedDate = (0, _dateFns.format)(new Date(year, month, day), "MMMM do, yyyy");
         // ..and update the calendar button
         dateButton.textContent = formattedDate;
     }
 });
+function hideCalendar() {
+    calendar.classList.remove("show");
+}
+function removeSelectedStyling() {
+    dates.forEach((date)=>{
+        date.classList.remove("selected");
+    });
+}
+function removeGrayedOutStyling() {
+    dates.forEach((date)=>{
+        date.classList.remove("date-picker-other-month-date");
+    });
+}
+function removeHideClass() {
+    datesRowSix.forEach((day)=>{
+        day.classList.remove("hide");
+    });
+}
 
 },{"date-fns":"9yHCA"}],"9yHCA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

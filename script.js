@@ -70,6 +70,9 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
   let currentMonthYear = format(new Date(currentYear, currentMonth), "MMMM - yyyy")
   monthYearHeader.textContent = currentMonthYear
 
+
+  console.log(`numberOfDaysInCurrentMonth: ${numberOfDaysInCurrentMonth}`)
+
   // Locate first and last day in the grid
   let firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
   let lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
@@ -80,17 +83,14 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     end: lastDayOfLastWeek
   })
 
+  
   // Extract and store the literal date numbers from the 35 or 42 days in the month grid
   allDays.forEach((day) => {
     allDaysNumbers.push(day.getDate())
   })
-
-  // Before applying dates, hide the sixth row if its not needed
-  if (weeksInCurrentMonth < 6) {
-    datesRowSix.forEach((day) => {
-      day.classList.add('hide')
-    })
-  }
+  
+  console.log(allDaysNumbers)
+  
 
   // Apply the correct dates to the calendar buttons
   for (i = 0; i < allDaysNumbers.length; i++) {
@@ -111,6 +111,9 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     }
   })
 
+  // First, clear any old gray styling
+  removeGrayedOutStyling()
+
   // Loop through our booleans, changing styling for dates not in the current month
   for (i = 0; i < areDaysPartOfMonth.length; i++) {
     // For true values,  continue  means start the loop again on the next item
@@ -119,6 +122,9 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
   }
 
   // Blue highlight the current date
+
+  // Begin by clearing any previously selected dates
+  removeSelectedStyling()
 
   // Loop through all of our days looking for the current date, and give it the blue selected style
   for (i = 0; i < allDays.length; i++) {
@@ -131,10 +137,18 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     }
   }
 
+   // Before applying dates, hide the sixth row if its not needed
+  // Remove any previous applications of hide class first
+  removeHideClass()
+  console.log(weeksInCurrentMonth)
+  if (weeksInCurrentMonth !== 6) {
+    console.log(true)
+    datesRowSix.forEach((day) => {
+      day.classList.add('hide')
+    })
+  }
 
   console.log('renderCalendar() is done running')
-
-  //////// 
 }
 
 
@@ -176,18 +190,18 @@ dateButton.addEventListener('click', () => {
 
 // HANDLER2
 // Cause calendar to disappear when the user picks a date
-dates.forEach((date) => {
-  date.addEventListener('click', () => {
-    calendar.classList.toggle('show')
-  })
-})
+// dates.forEach((date) => {
+//   date.addEventListener('click', () => {
+//     calendar.classList.toggle('show')
+//   })
+// })
 
 // HANDLER3
 // Change the blue highlight styling to the new date the user picks and remove the styling from the previously selected date
 // Add a click event listener to the grid of dates
 grid.addEventListener('click', (event) => {
 
-  // Begin with no blue highlighting
+  // Begin with no blue highlighting?
 
 
   // Grab the button the user selected..
@@ -201,6 +215,7 @@ grid.addEventListener('click', (event) => {
     date.classList.remove('selected')
   })
 })
+
 
 // HANDLER4
 // Make sure the calendar date button updates with the new date when the user picks a different date. 
@@ -220,6 +235,8 @@ grid.addEventListener('click', () => {
       currentMonth = month
       currentDay = day
       numberOfDaysInCurrentMonth = getDaysInMonth(new Date(currentYear, currentMonth, currentDay))
+      weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
+
 
 
       // Use these three pieces to format the date..
@@ -229,3 +246,26 @@ grid.addEventListener('click', () => {
     }
   }
 })
+
+
+function hideCalendar() {
+  calendar.classList.remove('show')
+}
+
+function removeSelectedStyling() {
+  dates.forEach((date) => {
+    date.classList.remove('selected')
+  })
+}
+
+function removeGrayedOutStyling() {
+  dates.forEach((date) => {
+    date.classList.remove('date-picker-other-month-date')
+  })
+}
+
+function removeHideClass() {
+  datesRowSix.forEach((day) => {
+    day.classList.remove('hide')
+  })
+}
