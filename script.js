@@ -2,6 +2,13 @@
 
 // We will be building a fully functional date picker given some starting HTML and CSS using a library called  date-fns
 
+/// BUGS: 
+
+// BUG #1: When scrolling back to the month that has the selected date, the blue styling needs to return
+
+// BUG #2: Blue styling is lost when clicking between dates
+
+
 // STEP1
 // Import necessary modules from the date-fns library
 // NOTE: This Node module syntax is possible with Parcel
@@ -53,6 +60,7 @@ dateButton.textContent = formattedDate;
 // let lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
 let allDays = []
 let allDaysNumbers = []
+// let weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
 let weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
 let areDaysPartOfMonth = []
 
@@ -72,6 +80,11 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
   // Before applying dates, hide the sixth row if its not needed
   // Remove any previous applications of hide class first
   removeHideClass()
+
+  
+  
+  console.log(`renderCal-weeksInCurrentMonth: ${weeksInCurrentMonth}`)
+
   if (weeksInCurrentMonth !== 6) {
     datesRowSix.forEach((day) => {
       day.classList.add('hide')
@@ -166,7 +179,13 @@ previousMonthButton.addEventListener('click', () => {
     currentYear = currentYear - 1
   } else {
     currentMonth = currentMonth - 1
+    // Set the currentDay to a safe middle of the month date 
+    currentDay = 15
   }
+  console.log(currentYear, currentMonth)
+  weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
+
+  console.log(`mnthBtn-weeksInCurrentMonth: ${weeksInCurrentMonth}`)
 
   renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
   removeSelectedStyling()
@@ -180,7 +199,9 @@ nextMonthButton.addEventListener('click', () => {
     currentYear = currentYear + 1
   } else {
     currentMonth = currentMonth + 1
+    currentDay = 15
   }
+  weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
 
   renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
   removeSelectedStyling()
@@ -246,8 +267,9 @@ grid.addEventListener('click', () => {
       currentMonth = month
       currentDay = day
       numberOfDaysInCurrentMonth = getDaysInMonth(new Date(currentYear, currentMonth, currentDay))
-      weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
+      // weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
 
+      console.log(`gridListener-weeksInCurrentMonth: ${weeksInCurrentMonth}`)
 
 
       // Use these three pieces to format the date..
@@ -281,3 +303,4 @@ function removeHideClass() {
     day.classList.remove('hide')
   })
 }
+
