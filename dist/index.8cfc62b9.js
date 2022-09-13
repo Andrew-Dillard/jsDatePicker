@@ -532,17 +532,15 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"6rimH":[function(require,module,exports) {
-// Lesson 73 - Date Picker
-// We will be building a fully functional date picker given some starting HTML and CSS using a library called  date-fns
+// Date Picker
+// Fully functional calendar date picker given some starting HTML and CSS using a library called  date-fns
 /// BUGS: 
 // BUG #1: When scrolling back to the month that has the selected date, the blue styling needs to return
-// BUG #2: Blue styling is lost when clicking between dates
-// STEP1
+// BUG #2: Blue styling is lost when clicking between dates though the date remains in the calendar button
 // Import necessary modules from the date-fns library
 // NOTE: This Node module syntax is possible with Parcel
 var _dateFns = require("date-fns");
-// STEP2
-// Declare and define variables to hold the HTML elements that will be modified
+// Declare and define variables to hold the appropriate HTML elements
 const container = document.querySelector(".date-picker-container");
 const dateButton = container.querySelector(".date-picker-button");
 const calendar = container.querySelector(".date-picker");
@@ -552,34 +550,21 @@ const datesRowSix = grid.querySelectorAll(".rowSix");
 const monthYearHeader = calendar.querySelector(".current-month");
 const previousMonthButton = calendar.querySelector(".prev-month-button");
 const nextMonthButton = calendar.querySelector(".next-month-button");
-// STEP3
-// Use The current date to declare and define variables to hold the current year, month, day, and number of days in the current month.
-// Get the current day by creating a new instance of the Date class
+// Use The current date to declare and define variables to hold the current year, month, day, and number of days in the current month. The values of these will change as the user changes the date
 const today = new Date();
 let currentYear = today.getFullYear();
 let currentMonth = today.getMonth();
 let currentDay = today.getDate();
 let numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(today);
-// STEP4
-// Display the current date in the proper format to our calendar date button
-const formattedDate = (0, _dateFns.format)(new Date(currentYear, currentMonth, currentDay), "MMMM do, yyyy") // August 29th, 2022
-;
+// Display the current date in the proper format to the calendar date button
+const formattedDate = (0, _dateFns.format)(new Date(currentYear, currentMonth, currentDay), "MMMM do, yyyy");
 dateButton.textContent = formattedDate;
-// Allow the user to toggle the month with left and right month buttons
-// BUG: Clicking in the gap between dates deselects the selected date
-// FUNCTIONS
-// When the user clicks the calendar button, look to the date in that button to render the calendar first 
-// The other time this function runs is when the user clicks a change month button
-// let currentMonthYear = format(new Date(currentYear, currentMonth), "MMMM - yyyy")
-// let firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
-// let lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
 let allDays = [];
 let allDaysNumbers = [];
-// let weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
 let weeksInCurrentMonth = (0, _dateFns.getWeeksInMonth)(new Date(currentYear, currentMonth, currentDay));
 let areDaysPartOfMonth = [];
+// FUNCTIONS //
 function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth) {
-    console.log("renderCalendar() has started running");
     // Update number of days in current month
     numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(new Date(currentYear, currentMonth, currentDay));
     // Update number of weeks in the month
@@ -587,7 +572,6 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     // Before applying dates, hide the sixth row if its not needed
     // Remove any previous applications of hide class first
     removeHideClass();
-    console.log(`renderCal-weeksInCurrentMonth: ${weeksInCurrentMonth}`);
     if (weeksInCurrentMonth !== 6) datesRowSix.forEach((day)=>{
         day.classList.add("hide");
     });
@@ -621,7 +605,7 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     });
     // First, clear any old gray styling
     removeGrayedOutStyling();
-    // Loop through our booleans, changing styling for dates not in the current month
+    // Loop through the booleans, changing styling for dates not in the current month
     for(i = 0; i < areDaysPartOfMonth.length; i++){
         // For true values,  continue  means start the loop again on the next item
         if (areDaysPartOfMonth[i] === true) continue;
@@ -630,13 +614,25 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     // Blue highlight the current date
     // Begin by clearing any previously selected dates
     removeSelectedStyling();
-    // Loop through all of our days looking for the current date, and give it the blue selected style
+    // Loop through all of the days looking for the current date, and give it the blue selected style
     for(i = 0; i < allDays.length; i++)if (allDays[i].getDate() === currentDay && allDays[i].getMonth() === currentMonth && allDays[i].getFullYear() === currentYear) dates[i].classList.add("selected");
-    console.log("renderCalendar() is done running");
 }
-// Event listeners
-// Month selector handlers
-// BUG: All dates are grayed out when month buttons change the year
+function removeSelectedStyling() {
+    dates.forEach((date)=>{
+        date.classList.remove("selected");
+    });
+}
+function removeGrayedOutStyling() {
+    dates.forEach((date)=>{
+        date.classList.remove("date-picker-other-month-date");
+    });
+}
+function removeHideClass() {
+    datesRowSix.forEach((day)=>{
+        day.classList.remove("hide");
+    });
+}
+// EVENT LISTENERS //
 previousMonthButton.addEventListener("click", ()=>{
     if (currentMonth === 0) {
         currentMonth = 11;
@@ -646,9 +642,7 @@ previousMonthButton.addEventListener("click", ()=>{
         // Set the currentDay to a safe middle of the month date 
         currentDay = 15;
     }
-    console.log(currentYear, currentMonth);
     weeksInCurrentMonth = (0, _dateFns.getWeeksInMonth)(new Date(currentYear, currentMonth, currentDay));
-    console.log(`mnthBtn-weeksInCurrentMonth: ${weeksInCurrentMonth}`);
     renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth);
     removeSelectedStyling();
 });
@@ -664,21 +658,18 @@ nextMonthButton.addEventListener("click", ()=>{
     renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth);
     removeSelectedStyling();
 });
-// HANDLER1
 // Allow the user to toggle the visibility of the calendar with the button
 // If the calendar is not visible, then run  renderCalendar()
 dateButton.addEventListener("click", ()=>{
     if (!calendar.classList.contains("show")) renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth);
     calendar.classList.toggle("show");
 });
-// HANDLER2
 // Cause calendar to disappear when the user picks a date
 dates.forEach((date)=>{
     date.addEventListener("click", ()=>{
         calendar.classList.toggle("show");
     });
 });
-// HANDLER3
 // Change the blue highlight styling to the new date the user picks and remove the styling from the previously selected date
 // Add a click event listener to the grid of dates
 grid.addEventListener("click", (event)=>{
@@ -689,16 +680,15 @@ grid.addEventListener("click", (event)=>{
     selectedDate.classList.toggle("selected");
     // Then loop through all the other buttons and remove the class of 'selected'
     dates.forEach((date)=>{
-        // Don't remove the styling we just set for the newly selected date! 
+        // Don't remove the styling that was just set for the newly selected date! 
         if (date === selectedDate) return;
         date.classList.remove("selected");
     });
 });
-// HANDLER4
 // Make sure the calendar date button updates with the new date when the user picks a different date. 
 // When the user selects a date on the calendar..
 grid.addEventListener("click", ()=>{
-    // ..loop through our date buttons..
+    // ..loop through the date buttons..
     for(i = 0; i < dates.length; i++)// ..find the index of the button with the class of 'selected'..
     if (dates[i].classList.contains("selected")) {
         // and use that index to access the associated Date object, extracting its year, month, and date
@@ -710,33 +700,12 @@ grid.addEventListener("click", ()=>{
         currentMonth = month;
         currentDay = day;
         numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(new Date(currentYear, currentMonth, currentDay));
-        // weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
-        console.log(`gridListener-weeksInCurrentMonth: ${weeksInCurrentMonth}`);
         // Use these three pieces to format the date..
         let formattedDate = (0, _dateFns.format)(new Date(year, month, day), "MMMM do, yyyy");
         // ..and update the calendar button
         dateButton.textContent = formattedDate;
     }
 });
-function hideCalendar() {
-    calendar.classList.remove("show");
-}
-function removeSelectedStyling() {
-    dates.forEach((date)=>{
-        date.classList.remove("selected");
-    });
-}
-function removeGrayedOutStyling() {
-    dates.forEach((date)=>{
-        date.classList.remove("date-picker-other-month-date");
-    });
-}
-function removeHideClass() {
-    console.log("removeHideClass() running");
-    datesRowSix.forEach((day)=>{
-        day.classList.remove("hide");
-    });
-}
 
 },{"date-fns":"9yHCA"}],"9yHCA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
