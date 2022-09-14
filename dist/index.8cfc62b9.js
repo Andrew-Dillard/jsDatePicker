@@ -537,6 +537,7 @@ function hmrAcceptRun(bundle, id) {
 /// BUGS: 
 // BUG #1: When scrolling back to the month that has the selected date, the blue styling needs to return
 // BUG #2: Blue styling is lost when clicking between dates though the date remains in the calendar button
+// BUG #3: after the user clicks change month buttons, renderCalendar() needs to look to the date in the calendar date button first when rendering the calendar
 // Import necessary modules from the date-fns library
 // NOTE: This Node module syntax is possible with Parcel
 var _dateFns = require("date-fns");
@@ -556,6 +557,9 @@ let currentYear = today.getFullYear();
 let currentMonth = today.getMonth();
 let currentDay = today.getDate();
 let numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(today);
+let calendarButtonYear = currentYear;
+let calendarButtonMonth = currentMonth;
+let calendarButtonDay = currentDay;
 // Empty array for accumulating all date objects in the calendar grid at hand
 let allDays = [];
 // Display the current date in the proper format to the calendar date button
@@ -606,6 +610,7 @@ function renderCalendar() {
     // Clear any outdated blue styling, then loop through all of the days looking for the current date, and give it the blue selected style
     removeSelectedStyling();
     for(i = 0; i < allDays.length; i++)if (allDays[i].getDate() === currentDay && allDays[i].getMonth() === currentMonth && allDays[i].getFullYear() === currentYear) dates[i].classList.add("selected");
+    if (!currentMonth === calendarButtonMonth || !currentYear === calendarButtonYear) removeSelectedStyling();
 }
 // This function removes the 'selected' CSS class from all of the date buttons
 function removeSelectedStyling() {
@@ -630,30 +635,43 @@ previousMonthButton.addEventListener("click", ()=>{
     if (currentMonth === 0) {
         currentMonth = 11;
         currentYear = currentYear - 1;
+    } else currentMonth = currentMonth - 1;
+    if (currentMonth === calendarButtonMonth && currentYear === calendarButtonYear) {
+        console.log("hello world");
+        currentDay = calendarButtonDay;
+        renderCalendar();
     } else {
-        currentMonth = currentMonth - 1;
-        // Set the currentDay to a safe middle of the month date 
         currentDay = 15;
+        renderCalendar();
+        removeSelectedStyling();
     }
-    renderCalendar();
-    removeSelectedStyling();
+// renderCalendar()
+// removeSelectedStyling()
 });
 nextMonthButton.addEventListener("click", ()=>{
     if (currentMonth === 11) {
         currentMonth = 0;
         currentYear = currentYear + 1;
+    } else currentMonth = currentMonth + 1;
+    if (currentMonth === calendarButtonMonth && currentYear === calendarButtonYear) {
+        console.log("hello world");
+        currentDay = calendarButtonDay;
+        renderCalendar();
     } else {
-        currentMonth = currentMonth + 1;
-        // Set the currentDay to a safe middle of the month date 
         currentDay = 15;
+        renderCalendar();
+        removeSelectedStyling();
     }
-    renderCalendar();
-    removeSelectedStyling();
 });
 // Allow the user to toggle the visibility of the calendar with the button
 // If the calendar is not visible, then run  renderCalendar()
 dateButton.addEventListener("click", ()=>{
-    if (!calendar.classList.contains("show")) renderCalendar();
+    if (!calendar.classList.contains("show")) {
+        currentYear = calendarButtonYear;
+        currentMonth = calendarButtonMonth;
+        currentDay = calendarButtonDay;
+        renderCalendar();
+    }
     calendar.classList.toggle("show");
 });
 // Cause calendar to disappear when the user picks a date
@@ -687,6 +705,9 @@ grid.addEventListener("click", ()=>{
         currentYear = allDays[i].getFullYear();
         currentMonth = allDays[i].getMonth();
         currentDay = allDays[i].getDate();
+        calendarButtonYear = currentYear;
+        calendarButtonMonth = currentMonth;
+        calendarButtonDay = currentDay;
         numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(new Date(currentYear, currentMonth, currentDay));
         // Display the current date in the proper format to the calendar date button
         formattedDate = (0, _dateFns.format)(new Date(currentYear, currentMonth, currentDay), "MMMM do, yyyy");
