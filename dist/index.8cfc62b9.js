@@ -559,8 +559,8 @@ let numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(today);
 // Display the current date in the proper format to the calendar date button
 const formattedDate = (0, _dateFns.format)(new Date(currentYear, currentMonth, currentDay), "MMMM do, yyyy");
 dateButton.textContent = formattedDate;
+// Create empty arrays for accumulating
 let allDays = [];
-let allDaysNumbers = [];
 let areDaysPartOfMonth = [];
 // FUNCTIONS //
 function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth) {
@@ -575,7 +575,7 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
         day.classList.add("hide");
     });
     // Begin each function call with fresh empty arrays
-    allDaysNumbers = [];
+    let allDaysNumbers = [];
     allDays = [];
     // Display the correctly formatted month and year in the header
     let currentMonthYear = (0, _dateFns.format)(new Date(currentYear, currentMonth), "MMMM - yyyy");
@@ -615,6 +615,7 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     removeSelectedStyling();
     // Loop through all of the days looking for the current date, and give it the blue selected style
     for(i = 0; i < allDays.length; i++)if (allDays[i].getDate() === currentDay && allDays[i].getMonth() === currentMonth && allDays[i].getFullYear() === currentYear) dates[i].classList.add("selected");
+    console.log(allDaysNumbers);
 }
 function removeSelectedStyling() {
     dates.forEach((date)=>{

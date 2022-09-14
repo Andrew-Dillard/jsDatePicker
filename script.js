@@ -34,10 +34,10 @@ let numberOfDaysInCurrentMonth = getDaysInMonth(today)
 const formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
 dateButton.textContent = formattedDate;
 
-
+// Create empty arrays for accumulating
 let allDays = []
-let allDaysNumbers = []
 let areDaysPartOfMonth = []
+
 
 
 // FUNCTIONS //
@@ -63,7 +63,7 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
   }
 
   // Begin each function call with fresh empty arrays
-  allDaysNumbers = []
+  let allDaysNumbers = []
   allDays = []
 
   // Display the correctly formatted month and year in the header
@@ -130,6 +130,9 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
       dates[i].classList.add('selected')
     }
   }
+
+  // console.log(allDaysNumbers)
+
 }
 
 function removeSelectedStyling() {
