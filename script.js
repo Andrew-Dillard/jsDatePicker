@@ -34,9 +34,8 @@ let numberOfDaysInCurrentMonth = getDaysInMonth(today)
 const formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
 dateButton.textContent = formattedDate;
 
-// Create empty arrays for accumulating
+// Create empty arrays for accumulating all date objects in the calendar grid at hand
 let allDays = []
-let areDaysPartOfMonth = []
 
 
 
@@ -96,7 +95,7 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
   // Create an array of booleans indicating each day's membership in current month or not
 
   // Begin with a fresh empty array
-  areDaysPartOfMonth = []
+  let areDaysPartOfMonth = []
   allDays.forEach((day) => {
     if (day.getMonth() === currentMonth) {
       areDaysPartOfMonth.push(true)
@@ -131,7 +130,7 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     }
   }
 
-  // console.log(allDaysNumbers)
+  // console.log(areDaysPartOfMonth)
 
 }
 

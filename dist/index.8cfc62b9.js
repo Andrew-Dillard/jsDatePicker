@@ -559,9 +559,8 @@ let numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(today);
 // Display the current date in the proper format to the calendar date button
 const formattedDate = (0, _dateFns.format)(new Date(currentYear, currentMonth, currentDay), "MMMM do, yyyy");
 dateButton.textContent = formattedDate;
-// Create empty arrays for accumulating
+// Create empty arrays for accumulating all date objects in the calendar grid at hand
 let allDays = [];
-let areDaysPartOfMonth = [];
 // FUNCTIONS //
 function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth) {
     // Update number of days in current month
@@ -597,7 +596,7 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     // Add grayed out styling to dates that are not part of the current month
     // Create an array of booleans indicating each day's membership in current month or not
     // Begin with a fresh empty array
-    areDaysPartOfMonth = [];
+    let areDaysPartOfMonth = [];
     allDays.forEach((day)=>{
         if (day.getMonth() === currentMonth) areDaysPartOfMonth.push(true);
         else areDaysPartOfMonth.push(false);
@@ -615,7 +614,7 @@ function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCur
     removeSelectedStyling();
     // Loop through all of the days looking for the current date, and give it the blue selected style
     for(i = 0; i < allDays.length; i++)if (allDays[i].getDate() === currentDay && allDays[i].getMonth() === currentMonth && allDays[i].getFullYear() === currentYear) dates[i].classList.add("selected");
-    console.log(allDaysNumbers);
+// console.log(areDaysPartOfMonth)
 }
 function removeSelectedStyling() {
     dates.forEach((date)=>{
