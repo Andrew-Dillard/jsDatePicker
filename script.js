@@ -34,14 +34,14 @@ let numberOfDaysInCurrentMonth = getDaysInMonth(today)
 let allDays = []
 
 // Display the current date in the proper format to the calendar date button
-const formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
+let formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
 dateButton.textContent = formattedDate;
 
 
 // FUNCTIONS //
 
-
-function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth) {
+// This function runs when the user clicks one of the change month buttons, or when the date button is clicked to display the calendar
+function renderCalendar() {
 
   // Update number of days in current month
   numberOfDaysInCurrentMonth = getDaysInMonth(new Date(currentYear, currentMonth, currentDay))
@@ -164,7 +164,7 @@ previousMonthButton.addEventListener('click', () => {
     // Set the currentDay to a safe middle of the month date 
     currentDay = 15
   }
-  renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
+  renderCalendar()
   removeSelectedStyling()
 })
 
@@ -177,7 +177,7 @@ nextMonthButton.addEventListener('click', () => {
     // Set the currentDay to a safe middle of the month date 
     currentDay = 15
   }
-  renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
+  renderCalendar()
   removeSelectedStyling()
 })
 
@@ -185,8 +185,7 @@ nextMonthButton.addEventListener('click', () => {
 // If the calendar is not visible, then run  renderCalendar()
 dateButton.addEventListener('click', () => {
   if (!calendar.classList.contains('show')) {
-    renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
-    
+  renderCalendar()
   }
   calendar.classList.toggle('show')
 })
@@ -227,9 +226,9 @@ grid.addEventListener('click', () => {
       currentDay = allDays[i].getDate()
 
       numberOfDaysInCurrentMonth = getDaysInMonth(new Date(currentYear, currentMonth, currentDay))
-      // Use these three pieces to format the date..
-      let formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
-      // ..and update the calendar button
+      
+      // Display the current date in the proper format to the calendar date button
+      formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
       dateButton.textContent = formattedDate;
     }
   }
