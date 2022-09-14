@@ -37,7 +37,6 @@ dateButton.textContent = formattedDate;
 
 let allDays = []
 let allDaysNumbers = []
-let weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
 let areDaysPartOfMonth = []
 
 
@@ -164,7 +163,6 @@ previousMonthButton.addEventListener('click', () => {
     // Set the currentDay to a safe middle of the month date 
     currentDay = 15
   }
-  weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
   renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
   removeSelectedStyling()
 })
@@ -175,9 +173,9 @@ nextMonthButton.addEventListener('click', () => {
     currentYear = currentYear + 1
   } else {
     currentMonth = currentMonth + 1
+    // Set the currentDay to a safe middle of the month date 
     currentDay = 15
   }
-  weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
   renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth)
   removeSelectedStyling()
 })
