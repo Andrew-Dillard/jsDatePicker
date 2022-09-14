@@ -556,11 +556,11 @@ let currentYear = today.getFullYear();
 let currentMonth = today.getMonth();
 let currentDay = today.getDate();
 let numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(today);
+// Create empty arrays for accumulating all date objects in the calendar grid at hand
+let allDays = [];
 // Display the current date in the proper format to the calendar date button
 const formattedDate = (0, _dateFns.format)(new Date(currentYear, currentMonth, currentDay), "MMMM do, yyyy");
 dateButton.textContent = formattedDate;
-// Create empty arrays for accumulating all date objects in the calendar grid at hand
-let allDays = [];
 // FUNCTIONS //
 function renderCalendar(currentYear, currentMonth, currentDay, numberOfDaysInCurrentMonth) {
     // Update number of days in current month
@@ -689,17 +689,13 @@ grid.addEventListener("click", ()=>{
     // ..loop through the date buttons..
     for(i = 0; i < dates.length; i++)// ..find the index of the button with the class of 'selected'..
     if (dates[i].classList.contains("selected")) {
-        // and use that index to access the associated Date object, extracting its year, month, and date
-        let year = allDays[i].getFullYear();
-        let month = allDays[i].getMonth();
-        let day = allDays[i].getDate();
-        // Update variables
-        currentYear = year;
-        currentMonth = month;
-        currentDay = day;
+        // and use that index to access the associated Date object, extracting its year, month, and date. Update variables
+        currentYear = allDays[i].getFullYear();
+        currentMonth = allDays[i].getMonth();
+        currentDay = allDays[i].getDate();
         numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(new Date(currentYear, currentMonth, currentDay));
         // Use these three pieces to format the date..
-        let formattedDate = (0, _dateFns.format)(new Date(year, month, day), "MMMM do, yyyy");
+        let formattedDate = (0, _dateFns.format)(new Date(currentYear, currentMonth, currentDay), "MMMM do, yyyy");
         // ..and update the calendar button
         dateButton.textContent = formattedDate;
     }
