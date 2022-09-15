@@ -1,7 +1,11 @@
 // Date Picker
 // Fully functional calendar date picker given some starting HTML and CSS using a library called  date-fns
 
-/// BUG: Blue styling is lost when clicking between dates though the date remains in the calendar button
+/// BUGS: none!
+/// ISSUES:
+// Issue1: renderCalendar() has 10 tasks!!! Unacceptable. Helper functions need to be created for clarity and easy of future understanding and updates to the code
+// Issue2: We are manually setting the currentDay to the 15th to avoid issues with the imported  getWeeksInMonth()  function. Though it works, I despise this approach. 
+// Issue3: The change month event listeners have repeated code that needs to be encapsulated in a function
 
 // Import necessary modules from the date-fns library
 // NOTE: This Node module syntax is possible with Parcel
@@ -41,7 +45,7 @@ dateButton.textContent = formattedDate;
 // FUNCTIONS //
 
 
-// This function runs when the user clicks one of the change month buttons, or when the date button is clicked to display the calendar
+// Displays the calendar of the appropriate month. The function runs when the user clicks one of the change month buttons, or when the date button is clicked to display the calendar
 function renderCalendar() {
   
   // Display the correctly formatted month and year in the header
@@ -110,7 +114,7 @@ function renderCalendar() {
     }
   }
 
-  // If the month being rendered doesn't match the calendar button, then remove any blue highlighting
+  // If the month being rendered doesn't match the date in the calendar button, then remove any blue highlighting
   if (
     !currentMonth === calendarButtonMonth ||
     !currentYear === calendarButtonYear) {
@@ -118,21 +122,21 @@ function renderCalendar() {
   }
 }
 
-// This function removes the 'selected' CSS class from all of the date buttons
+// Removes the 'selected' CSS class from all of the date buttons
 function removeSelectedStyling() {
   dates.forEach((date) => {
     date.classList.remove('selected')
   })
 }
 
-// This function removes the gray styling class from all of the date buttons
+// Removes the gray styling class from all of the date buttons
 function removeGrayedOutStyling() {
   dates.forEach((date) => {
     date.classList.remove('date-picker-other-month-date')
   })
 }
 
-// This function applies the CSS class 'hide' to all the row 6 date buttons
+// Applies the CSS class 'hide' to all the row 6 date buttons
 function removeHideClass() {
   datesRowSix.forEach((day) => {
     day.classList.remove('hide')
@@ -142,9 +146,8 @@ function removeHideClass() {
 
 // EVENT LISTENERS //
 
-// Register an event handler to set and display the previous month
+// 1. When the user clicks the back button, set and display the previous month
 previousMonthButton.addEventListener('click', () => {
-  
   // If it is January, set the month to December and go back one year. Otherwise, just decrement the month
   if (currentMonth === 0) {
     currentMonth = 11
@@ -152,8 +155,7 @@ previousMonthButton.addEventListener('click', () => {
   } else {
     currentMonth = currentMonth - 1
   }
-
-  // If the month the user is going back to matches the date in the calendar button, use the day value from the calendar button to update the currentDay and render the month. Otherwise, set the day to the 15th to not cause an issue with  getWeeksInMonth()  
+  // If the month the user is going back to matches the date in the calendar button, use the day value from the calendar button to update the currentDay and render the month. Otherwise, set the day to the 15th to not cause an issue with  getWeeksInMonth() , render the calendar, and remove the blue styling since we are not displaying the month that matches the calendar date button
   if (
     currentMonth === calendarButtonMonth &&
     currentYear === calendarButtonYear
@@ -167,15 +169,14 @@ previousMonthButton.addEventListener('click', () => {
   }
 })
 
+// 2. See previousMonthButton event listener for details as it mirrors this handler
 nextMonthButton.addEventListener('click', () => {
-
   if (currentMonth === 11) {
     currentMonth = 0
     currentYear = currentYear + 1
   } else {
     currentMonth = currentMonth + 1
   }
-  
   if (
     currentMonth === calendarButtonMonth &&
     currentYear === calendarButtonYear
@@ -189,61 +190,46 @@ nextMonthButton.addEventListener('click', () => {
   }
 })
 
-// Allow the user to toggle the visibility of the calendar with the calendar button
-// If the calendar is not visible, then run  renderCalendar()  with the date set in the calendar button
+// 3. When the user clicks the calendar button, if the calendar is not visible, then run  renderCalendar()  with the date set in the calendar button by updating the variables first with the calendar button date values. Then toggle the visibility of the calendar. 
 dateButton.addEventListener('click', () => {
   if (!calendar.classList.contains('show')) {
-
   currentYear = calendarButtonYear
   currentMonth = calendarButtonMonth
   currentDay = calendarButtonDay
-
   renderCalendar()
   }
   calendar.classList.toggle('show')
 })
 
-// Cause calendar to disappear when the user picks a date
+// 4. Calendar disappears when the user picks a date
 dates.forEach((date) => {
   date.addEventListener('click', () => {
     calendar.classList.toggle('show')
   })
 })
 
-// Change the blue highlight styling to the new date the user picks and remove the styling from the previously selected date
-// Add a click event listener to the grid of dates
-grid.addEventListener('click', (event) => {
-  // Begin with no blue highlighting?
-  // Grab the button the user selected..
-  const selectedDate = event.target
-  // ..and toggle the 'selected' class to add blue highlighting
-  selectedDate.classList.toggle('selected')
-  // Then loop through all the other buttons and remove the class of 'selected'
-  dates.forEach((date) => {
-    // Don't remove the styling that was just set for the newly selected date! 
-    if (date === selectedDate) return
-    date.classList.remove('selected')
+// 5. When the user clicks a date, switch the blue highlighting from the old date to the new date. Grab the button the user selected and toggle the 'selected' class to add blue highlighting. Then loop through all the other buttons and remove the class of 'selected' without removing the styling that was just set for the new chosen date. 
+dates.forEach((date) => {
+  date.addEventListener('click', (event) => {
+    const selectedDate = event.target
+    selectedDate.classList.toggle('selected')
+    dates.forEach((date) => {
+      if (date === selectedDate) return
+      date.classList.remove('selected')
+    })
   })
 })
 
-// Make sure the calendar date button updates with the new date when the user picks a different date. 
-// When the user selects a date on the calendar..
-grid.addEventListener('click', () => {
-  // ..loop through the date buttons..
+// 6. The calendar date button updates with the new date when the user picks a different date. When the user selects a date on the calendar, loop through the date buttons, find the index of the button with the class of 'selected', and use that index to access the associated Date object, extracting its year, month, and date. Update variables used for renderCalendar() and calendar button variables as well. Finally, update the date displayed in the calendar button. 
+grid.addEventListener('click', () => {  
   for (i = 0; i < dates.length; i++) {
-    // ..find the index of the button with the class of 'selected'..
     if (dates[i].classList.contains('selected')) {
-      // and use that index to access the associated Date object, extracting its year, month, and date. Update variables
       currentYear = allDays[i].getFullYear()
       currentMonth = allDays[i].getMonth()
       currentDay = allDays[i].getDate()
-      
-      // Update calendar button date values
       calendarButtonYear = currentYear
       calendarButtonMonth = currentMonth
       calendarButtonDay = currentDay
-      
-      // Display the current date in the proper format to the calendar date button
       formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
       dateButton.textContent = formattedDate;
     }
