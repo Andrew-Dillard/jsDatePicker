@@ -536,9 +536,7 @@ function hmrAcceptRun(bundle, id) {
 // Fully functional calendar date picker given some starting HTML and CSS using a library called  date-fns
 /// BUGS: none!
 /// ISSUES:
-// Issue1: renderCalendar() has 10 tasks!!! Unacceptable. Helper functions need to be created for clarity and ease of future understanding and updates to the code
-// Issue2: We are manually setting the currentDay to the 15th to avoid issues with the imported  getWeeksInMonth()  function. Though it works, I despise this approach. 
-// Issue3: The change month event listeners have repeated code that needs to be encapsulated in a function
+// Issue1: renderCalendar() has 10 tasks and 80 lines of code!!! Unacceptable. Helper functions need to be created for clarity and ease of future understanding and updates to the code. I like the idea of programs reading like a simple set of instructions with complexity being hidden away in function definitions. 
 // Import necessary modules from the date-fns library
 // NOTE: This Node module syntax is possible with Parcel
 var _dateFns = require("date-fns");
@@ -564,20 +562,14 @@ let calendarButtonDay = currentDay;
 // Empty array for storing all date objects in the calendar grid at hand
 let allDays = [];
 // Display the current date in the proper format to the calendar date button
-let formattedDate = (0, _dateFns.format)(new Date(currentYear, currentMonth, currentDay), "MMMM do, yyyy");
-dateButton.textContent = formattedDate;
+setCalendarButtonDate();
 // FUNCTIONS //
 // Displays the calendar of the appropriate month. The function runs when the user clicks one of the change month buttons, or when the date button is clicked to display the calendar
 function renderCalendar() {
     // Display the correctly formatted month and year in the header
-    let currentMonthYear = (0, _dateFns.format)(new Date(currentYear, currentMonth), "MMMM - yyyy");
-    monthYearHeader.textContent = currentMonthYear;
-    // Remove any previous applications of the hide class, then hide the sixth row if unneeded
-    removeHideClass();
-    let weeksInCurrentMonth = (0, _dateFns.getWeeksInMonth)(new Date(currentYear, currentMonth));
-    if (weeksInCurrentMonth !== 6) datesRowSix.forEach((day)=>{
-        day.classList.add("hide");
-    });
+    setHeader();
+    // Remove any previous applications of the hide class to row six elements, then hide the sixth row if appropriate
+    hideOrDisplayRowSix();
     // Locate first and last day in the grid 
     let numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(new Date(currentYear, currentMonth, currentDay));
     let firstDayOfFirstWeek = (0, _dateFns.startOfWeek)(new Date(currentYear, currentMonth));
@@ -613,6 +605,22 @@ function renderCalendar() {
     for(i = 0; i < allDays.length; i++)if (allDays[i].getDate() === currentDay && allDays[i].getMonth() === currentMonth && allDays[i].getFullYear() === currentYear) dates[i].classList.add("selected");
     // If the month being rendered doesn't match the date in the calendar button, then remove any blue highlighting
     if (!currentMonth === calendarButtonMonth || !currentYear === calendarButtonYear) removeSelectedStyling();
+// END OF renderCalendar() 
+}
+function setCalendarButtonDate() {
+    let formattedDate = (0, _dateFns.format)(new Date(currentYear, currentMonth, currentDay), "MMMM do, yyyy");
+    dateButton.textContent = formattedDate;
+}
+function setHeader() {
+    let currentMonthYear = (0, _dateFns.format)(new Date(currentYear, currentMonth), "MMMM - yyyy");
+    monthYearHeader.textContent = currentMonthYear;
+}
+function hideOrDisplayRowSix() {
+    removeHideClass();
+    let weeksInCurrentMonth = (0, _dateFns.getWeeksInMonth)(new Date(currentYear, currentMonth));
+    if (weeksInCurrentMonth !== 6) datesRowSix.forEach((day)=>{
+        day.classList.add("hide");
+    });
 }
 // Removes the 'selected' CSS class from all of the date buttons
 function removeSelectedStyling() {
@@ -696,8 +704,9 @@ grid.addEventListener("click", ()=>{
         calendarButtonYear = currentYear;
         calendarButtonMonth = currentMonth;
         calendarButtonDay = currentDay;
-        formattedDate = (0, _dateFns.format)(new Date(currentYear, currentMonth, currentDay), "MMMM do, yyyy");
-        dateButton.textContent = formattedDate;
+        setCalendarButtonDate();
+    // formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
+    // dateButton.textContent = formattedDate;
     }
 });
 

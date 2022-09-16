@@ -3,9 +3,7 @@
 
 /// BUGS: none!
 /// ISSUES:
-// Issue1: renderCalendar() has 10 tasks!!! Unacceptable. Helper functions need to be created for clarity and ease of future understanding and updates to the code
-// Issue2: We are manually setting the currentDay to the 15th to avoid issues with the imported  getWeeksInMonth()  function. Though it works, I despise this approach. 
-// Issue3: The change month event listeners have repeated code that needs to be encapsulated in a function
+// Issue1: renderCalendar() has 10 tasks and 80 lines of code!!! Unacceptable. Helper functions need to be created for clarity and ease of future understanding and updates to the code. I like the idea of programs reading like a simple set of instructions with complexity being hidden away in function definitions. 
 
 // Import necessary modules from the date-fns library
 // NOTE: This Node module syntax is possible with Parcel
@@ -37,8 +35,7 @@ let calendarButtonDay = currentDay
 let allDays = []
 
 // Display the current date in the proper format to the calendar date button
-let formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
-dateButton.textContent = formattedDate;
+setCalendarButtonDate()
 
 
 // FUNCTIONS //
@@ -48,17 +45,10 @@ dateButton.textContent = formattedDate;
 function renderCalendar() {
   
   // Display the correctly formatted month and year in the header
-  let currentMonthYear = format(new Date(currentYear, currentMonth), "MMMM - yyyy")
-  monthYearHeader.textContent = currentMonthYear
+  setHeader()
 
-  // Remove any previous applications of the hide class, then hide the sixth row if unneeded
-  removeHideClass()
-  let weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth))
-  if (weeksInCurrentMonth !== 6) {
-    datesRowSix.forEach((day) => {
-      day.classList.add('hide')
-    })
-  }
+  // Remove any previous applications of the hide class to row six elements, then hide the sixth row if appropriate
+  hideOrDisplayRowSix()
 
   // Locate first and last day in the grid 
   let numberOfDaysInCurrentMonth = getDaysInMonth(new Date(currentYear, currentMonth, currentDay))
@@ -118,6 +108,27 @@ function renderCalendar() {
     !currentMonth === calendarButtonMonth ||
     !currentYear === calendarButtonYear) {
     removeSelectedStyling()
+  }
+  // END OF renderCalendar() 
+}
+
+function setCalendarButtonDate() {
+  let formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
+  dateButton.textContent = formattedDate;
+}
+
+function setHeader() {
+  let currentMonthYear = format(new Date(currentYear, currentMonth), "MMMM - yyyy")
+  monthYearHeader.textContent = currentMonthYear
+}
+
+function hideOrDisplayRowSix() {
+  removeHideClass()
+  let weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth))
+  if (weeksInCurrentMonth !== 6) {
+    datesRowSix.forEach((day) => {
+      day.classList.add('hide')
+    })
   }
 }
 
@@ -222,8 +233,9 @@ grid.addEventListener('click', () => {
       calendarButtonYear = currentYear
       calendarButtonMonth = currentMonth
       calendarButtonDay = currentDay
-      formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
-      dateButton.textContent = formattedDate;
+      setCalendarButtonDate()
+      // formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
+      // dateButton.textContent = formattedDate;
     }
   }
 })
