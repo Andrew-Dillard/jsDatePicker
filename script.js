@@ -3,7 +3,7 @@
 
 /// BUGS: none!
 /// ISSUES:
-// Issue1: renderCalendar() has 10 tasks!!! Unacceptable. Helper functions need to be created for clarity and easy of future understanding and updates to the code
+// Issue1: renderCalendar() has 10 tasks!!! Unacceptable. Helper functions need to be created for clarity and ease of future understanding and updates to the code
 // Issue2: We are manually setting the currentDay to the 15th to avoid issues with the imported  getWeeksInMonth()  function. Though it works, I despise this approach. 
 // Issue3: The change month event listeners have repeated code that needs to be encapsulated in a function
 
@@ -27,7 +27,6 @@ const today = new Date();
 let currentYear = today.getFullYear() 
 let currentMonth = today.getMonth()
 let currentDay = today.getDate()
-let numberOfDaysInCurrentMonth = getDaysInMonth(today)
 
 // These variables contain the date values in the calendar button
 let calendarButtonYear = currentYear
@@ -54,15 +53,15 @@ function renderCalendar() {
 
   // Remove any previous applications of the hide class, then hide the sixth row if unneeded
   removeHideClass()
-  let weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth, currentDay))
+  let weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth))
   if (weeksInCurrentMonth !== 6) {
     datesRowSix.forEach((day) => {
       day.classList.add('hide')
     })
   }
 
-  // Update number of days in current month and locate first and last day in the grid 
-  numberOfDaysInCurrentMonth = getDaysInMonth(new Date(currentYear, currentMonth, currentDay))
+  // Locate first and last day in the grid 
+  let numberOfDaysInCurrentMonth = getDaysInMonth(new Date(currentYear, currentMonth, currentDay))
   let firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
   let lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
 
@@ -163,7 +162,7 @@ previousMonthButton.addEventListener('click', () => {
     currentDay = calendarButtonDay
     renderCalendar()
   } else {
-    currentDay = 15
+    // currentDay = 15
     renderCalendar()
     removeSelectedStyling()
   }
@@ -184,7 +183,7 @@ nextMonthButton.addEventListener('click', () => {
     currentDay = calendarButtonDay
     renderCalendar()
   } else {
-    currentDay = 15
+    // currentDay = 15
     renderCalendar()
     removeSelectedStyling()
   }
