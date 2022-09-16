@@ -33,6 +33,7 @@ let calendarButtonDay = currentDay
 
 // Empty array for storing all date objects in the calendar grid at hand
 let allDays = []
+let areDaysPartOfMonth = []
 
 // Display the current date in the proper format to the calendar date button
 setCalendarButtonDate()
@@ -50,38 +51,14 @@ function renderCalendar() {
   // Remove any previous applications of the hide class to row six elements, then hide the sixth row if appropriate
   hideOrDisplayRowSix()
 
-  // Locate first and last day in the grid 
-  let numberOfDaysInCurrentMonth = getDaysInMonth(new Date(currentYear, currentMonth, currentDay))
-  let firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
-  let lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
+  // Find and store all the days in the grid at hand
+  findAllGridDays()
 
-  // Create an array of all the days (Date objects) in the current month's calendar grid (35 or 42 items depending on if the month spans 6 weeks) using these beginning and ending dates. Begin by clearing the array of previous values
-  allDays = []
-  allDays = eachDayOfInterval({
-    start: firstDayOfFirstWeek,
-    end: lastDayOfLastWeek
-  })
+  // Apply correct date numbers
+  setGridNumbers()
 
-  // Extract and store the literal date numbers from the 35 or 42 days in the month grid
-  let allDaysNumbers = []
-  allDays.forEach((day) => {
-    allDaysNumbers.push(day.getDate())
-  })
-
-  // Apply the correct date numbers to the calendar buttons
-  for (i = 0; i < allDaysNumbers.length; i++) {
-    dates[i].textContent = allDaysNumbers[i]
-  }
-
-  // Create an array of booleans indicating each day's membership in current month or not
-  let areDaysPartOfMonth = []
-  allDays.forEach((day) => {
-    if (day.getMonth() === currentMonth) {
-      areDaysPartOfMonth.push(true)
-    } else  {
-      areDaysPartOfMonth.push(false)
-    }
-  })
+  // Locate days not in the current month to gray out
+  findDaysInAdjacentMonths()
 
   // Clear any old gray styling from prior function calls, then loop through the booleans, adding gray styling for dates not in the current month
   removeGrayedOutStyling()
@@ -111,6 +88,46 @@ function renderCalendar() {
   }
   // END OF renderCalendar() 
 }
+
+function findAllGridDays() {
+  // Locate first and last day in the grid 
+  let numberOfDaysInCurrentMonth = getDaysInMonth(new Date(currentYear, currentMonth, currentDay))
+  let firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
+  let lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
+
+  // Create an array of all the days (Date objects) in the current month's calendar grid (35 or 42 items depending on if the month spans 6 weeks) using these beginning and ending dates. Begin by clearing the array of previous values
+  allDays = []
+  allDays = eachDayOfInterval({
+    start: firstDayOfFirstWeek,
+    end: lastDayOfLastWeek
+  })
+}
+
+function setGridNumbers() {
+  // Extract and store the literal date numbers from the 35 or 42 days in the month grid
+  let allDaysNumbers = []
+  allDays.forEach((day) => {
+    allDaysNumbers.push(day.getDate())
+  })
+  // Apply the correct date numbers to the calendar buttons
+  for (i = 0; i < allDaysNumbers.length; i++) {
+    dates[i].textContent = allDaysNumbers[i]
+  }
+}
+
+function findDaysInAdjacentMonths() {
+  // Create an array of booleans indicating each day's membership in current month or not
+  areDaysPartOfMonth = []
+  allDays.forEach((day) => {
+    if (day.getMonth() === currentMonth) {
+      areDaysPartOfMonth.push(true)
+    } else  {
+      areDaysPartOfMonth.push(false)
+    }
+  })
+}
+
+
 
 function setCalendarButtonDate() {
   let formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
