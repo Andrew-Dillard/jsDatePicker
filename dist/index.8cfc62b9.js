@@ -632,6 +632,15 @@ function removeHideClass() {
         day.classList.remove("hide");
     });
 }
+function checkCalendarButtonDate() {
+    if (currentMonth === calendarButtonMonth && currentYear === calendarButtonYear) {
+        currentDay = calendarButtonDay;
+        renderCalendar();
+    } else {
+        renderCalendar();
+        removeSelectedStyling();
+    }
+}
 // EVENT LISTENERS //
 // 1. When the user clicks the back button, set and display the previous month
 previousMonthButton.addEventListener("click", ()=>{
@@ -641,14 +650,7 @@ previousMonthButton.addEventListener("click", ()=>{
         currentYear = currentYear - 1;
     } else currentMonth = currentMonth - 1;
     // If the month the user is going back to matches the date in the calendar button, use the day value from the calendar button to update the currentDay and render the month. Otherwise, set the day to the 15th to not cause an issue with  getWeeksInMonth() , render the calendar, and remove the blue styling since we are not displaying the month that matches the calendar date button
-    if (currentMonth === calendarButtonMonth && currentYear === calendarButtonYear) {
-        currentDay = calendarButtonDay;
-        renderCalendar();
-    } else {
-        // currentDay = 15
-        renderCalendar();
-        removeSelectedStyling();
-    }
+    checkCalendarButtonDate();
 });
 // 2. See previousMonthButton event listener for details as it mirrors this handler
 nextMonthButton.addEventListener("click", ()=>{
@@ -656,14 +658,7 @@ nextMonthButton.addEventListener("click", ()=>{
         currentMonth = 0;
         currentYear = currentYear + 1;
     } else currentMonth = currentMonth + 1;
-    if (currentMonth === calendarButtonMonth && currentYear === calendarButtonYear) {
-        currentDay = calendarButtonDay;
-        renderCalendar();
-    } else {
-        // currentDay = 15
-        renderCalendar();
-        removeSelectedStyling();
-    }
+    checkCalendarButtonDate();
 });
 // 3. When the user clicks the calendar button, if the calendar is not visible, then run  renderCalendar()  with the date set in the calendar button by updating the variables first with the calendar button date values. Then toggle the visibility of the calendar. 
 dateButton.addEventListener("click", ()=>{
