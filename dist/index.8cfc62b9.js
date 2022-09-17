@@ -577,19 +577,22 @@ function renderCalendar() {
     setGridNumbers();
     // Locate days not in the current month to gray out
     findDaysInAdjacentMonths();
-    // Clear any old gray styling from prior function calls, then loop through the booleans, adding gray styling for dates not in the current month
-    removeGrayedOutStyling();
-    for(i = 0; i < areDaysPartOfMonth.length; i++){
-        // For true values,  continue  means start the loop again on the next item
-        if (areDaysPartOfMonth[i] === true) continue;
-        dates[i].classList.add("date-picker-other-month-date");
-    }
-    // Clear any outdated blue styling, then loop through all of the days looking for the current date, and give it the blue selected style
-    removeSelectedStyling();
-    for(i = 0; i < allDays.length; i++)if (allDays[i].getDate() === currentDay && allDays[i].getMonth() === currentMonth && allDays[i].getFullYear() === currentYear) dates[i].classList.add("selected");
-    // If the month being rendered doesn't match the date in the calendar button, then remove any blue highlighting
-    if (!currentMonth === calendarButtonMonth || !currentYear === calendarButtonYear) removeSelectedStyling();
-// END OF renderCalendar() 
+    // Add gray styling to days not in the current month
+    grayOutDaysInAdjacentMonths();
+    // Blue highlight the date chosen by the user
+    highlightSelectedDate();
+}
+// renderCalendar() TASKS:
+function setHeader() {
+    let currentMonthYear = (0, _dateFns.format)(new Date(currentYear, currentMonth), "MMMM - yyyy");
+    monthYearHeader.textContent = currentMonthYear;
+}
+function hideOrDisplayRowSix() {
+    removeHideClass();
+    let weeksInCurrentMonth = (0, _dateFns.getWeeksInMonth)(new Date(currentYear, currentMonth));
+    if (weeksInCurrentMonth !== 6) datesRowSix.forEach((day)=>{
+        day.classList.add("hide");
+    });
 }
 function findAllGridDays() {
     // Locate first and last day in the grid 
@@ -620,20 +623,26 @@ function findDaysInAdjacentMonths() {
         else areDaysPartOfMonth.push(false);
     });
 }
+function grayOutDaysInAdjacentMonths() {
+    // Clear any old gray styling from prior function calls, then loop through the booleans, adding gray styling for dates not in the current month
+    removeGrayedOutStyling();
+    for(i = 0; i < areDaysPartOfMonth.length; i++){
+        // For true values,  continue  means start the loop again on the next item
+        if (areDaysPartOfMonth[i] === true) continue;
+        dates[i].classList.add("date-picker-other-month-date");
+    }
+}
+function highlightSelectedDate() {
+    // Clear any outdated blue styling, then loop through all of the days looking for the current date, and give it the blue selected style
+    removeSelectedStyling();
+    for(i = 0; i < allDays.length; i++)if (allDays[i].getDate() === currentDay && allDays[i].getMonth() === currentMonth && allDays[i].getFullYear() === currentYear) dates[i].classList.add("selected");
+    // If the month being rendered doesn't match the date in the calendar button, then remove any blue highlighting
+    if (!currentMonth === calendarButtonMonth || !currentYear === calendarButtonYear) removeSelectedStyling();
+}
+// OTHER FUNCTIONS:
 function setCalendarButtonDate() {
     let formattedDate = (0, _dateFns.format)(new Date(currentYear, currentMonth, currentDay), "MMMM do, yyyy");
     dateButton.textContent = formattedDate;
-}
-function setHeader() {
-    let currentMonthYear = (0, _dateFns.format)(new Date(currentYear, currentMonth), "MMMM - yyyy");
-    monthYearHeader.textContent = currentMonthYear;
-}
-function hideOrDisplayRowSix() {
-    removeHideClass();
-    let weeksInCurrentMonth = (0, _dateFns.getWeeksInMonth)(new Date(currentYear, currentMonth));
-    if (weeksInCurrentMonth !== 6) datesRowSix.forEach((day)=>{
-        day.classList.add("hide");
-    });
 }
 // Removes the 'selected' CSS class from all of the date buttons
 function removeSelectedStyling() {
