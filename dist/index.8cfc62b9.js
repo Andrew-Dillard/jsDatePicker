@@ -535,8 +535,7 @@ function hmrAcceptRun(bundle, id) {
 // Date Picker
 // Fully functional calendar date picker given some starting HTML and CSS using a library called  date-fns
 /// BUGS: none!
-/// ISSUES:
-// Issue1: renderCalendar() has 10 tasks and 80 lines of code!!! Unacceptable. Helper functions need to be created for clarity and ease of future understanding and updates to the code. I like the idea of programs reading like a simple set of instructions with complexity being hidden away in function definitions. 
+/// ISSUES: none!
 // Import necessary modules from the date-fns library
 // NOTE: This Node module syntax is possible with Parcel
 var _dateFns = require("date-fns");
@@ -700,15 +699,10 @@ dateButton.addEventListener("click", ()=>{
     }
     calendar.classList.toggle("show");
 });
-// 4. Calendar disappears when the user picks a date
-dates.forEach((date)=>{
-    date.addEventListener("click", ()=>{
-        calendar.classList.toggle("show");
-    });
-});
-// 5. When the user clicks a date, switch the blue highlighting from the old date to the new date. Grab the button the user selected and toggle the 'selected' class to add blue highlighting. Then loop through all the other buttons and remove the class of 'selected' without removing the styling that was just set for the new chosen date. 
+// 4. When the user clicks a date, hide the calendar and switch the blue highlighting from the old date to the new date. Grab the button the user selected and toggle the 'selected' class to add blue highlighting. Then loop through all the other buttons and remove the class of 'selected' without removing the styling that was just set for the new chosen date. 
 dates.forEach((date)=>{
     date.addEventListener("click", (event)=>{
+        calendar.classList.toggle("show");
         const selectedDate = event.target;
         selectedDate.classList.toggle("selected");
         dates.forEach((date)=>{
@@ -717,7 +711,7 @@ dates.forEach((date)=>{
         });
     });
 });
-// 6. The calendar date button updates with the new date when the user picks a different date. When the user selects a date on the calendar, loop through the date buttons, find the index of the button with the class of 'selected', and use that index to access the associated Date object, extracting its year, month, and date. Update variables used for renderCalendar() and calendar button variables as well. Finally, update the date displayed in the calendar button. 
+// 5. The calendar date button updates with the new date when the user picks a different date. When the user selects a date on the calendar, loop through the date buttons, find the index of the button with the class of 'selected', and use that index to access the associated Date object, extracting its year, month, and date. Update variables used for renderCalendar() and calendar button variables as well. Finally, update the date displayed in the calendar button. 
 grid.addEventListener("click", ()=>{
     for(i = 0; i < dates.length; i++)if (dates[i].classList.contains("selected")) {
         currentYear = allDays[i].getFullYear();
