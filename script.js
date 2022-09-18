@@ -235,35 +235,27 @@ dateButton.addEventListener('click', () => {
   calendar.classList.toggle('show')
 })
 
-// 4. When the user clicks a date, hide the calendar and switch the blue highlighting from the old date to the new date. Grab the button the user selected and toggle the 'selected' class to add blue highlighting. Then loop through all the other buttons and remove the class of 'selected' without removing the styling that was just set for the new chosen date. 
+// 4. When the user clicks a date, hide the calendar and switch the blue highlighting from the old date to the new date. Grab the button the user selected and toggle the 'selected' class to add blue highlighting. Then loop through all the other buttons and remove the class of 'selected' without removing the styling that was just set for the new chosen date. The calendar date button updates with the new date when the user picks a different date. When the user selects a date on the calendar, loop through the date buttons, find the index of the button with the class of 'selected', and use that index to access the associated Date object, extracting its year, month, and date. Update variables used for renderCalendar() and calendar button variables as well. Finally, update the date displayed in the calendar button. 
 dates.forEach((date) => {
   date.addEventListener('click', (event) => {
-
     calendar.classList.toggle('show')
-
     const selectedDate = event.target
     selectedDate.classList.toggle('selected')
     dates.forEach((date) => {
       if (date === selectedDate) return
       date.classList.remove('selected')
     })
+
+    for (i = 0; i < dates.length; i++) {
+      if (dates[i].classList.contains('selected')) {
+        currentYear = allDays[i].getFullYear()
+        currentMonth = allDays[i].getMonth()
+        currentDay = allDays[i].getDate()
+        calendarButtonYear = currentYear
+        calendarButtonMonth = currentMonth
+        calendarButtonDay = currentDay
+        setCalendarButtonDate()
+      }
+    }
   })
 })
-
-// 5. The calendar date button updates with the new date when the user picks a different date. When the user selects a date on the calendar, loop through the date buttons, find the index of the button with the class of 'selected', and use that index to access the associated Date object, extracting its year, month, and date. Update variables used for renderCalendar() and calendar button variables as well. Finally, update the date displayed in the calendar button. 
-grid.addEventListener('click', () => {  
-  for (i = 0; i < dates.length; i++) {
-    if (dates[i].classList.contains('selected')) {
-      currentYear = allDays[i].getFullYear()
-      currentMonth = allDays[i].getMonth()
-      currentDay = allDays[i].getDate()
-      calendarButtonYear = currentYear
-      calendarButtonMonth = currentMonth
-      calendarButtonDay = currentDay
-      setCalendarButtonDate()
-      // formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
-      // dateButton.textContent = formattedDate;
-    }
-  }
-})
-
