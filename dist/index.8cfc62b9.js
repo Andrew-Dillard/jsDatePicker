@@ -536,6 +536,8 @@ function hmrAcceptRun(bundle, id) {
 // Fully functional calendar date picker given some starting HTML and CSS using a library called  date-fns
 /// BUGS: none!
 /// ISSUES: none!
+/// CONCERNS: There is unnecessary/repeated code. I suspect there are extra steps when it comes to applying and removing the 'selected' class
+// The event listener code for the dates has a forEach then a for loop I'd like to combine into one loop for simplicity. I think I am looping too much. 
 // Import necessary modules from the date-fns library
 // NOTE: This Node module syntax is possible with Parcel
 var _dateFns = require("date-fns");
@@ -661,6 +663,12 @@ function removeHideClass() {
         day.classList.remove("hide");
     });
 }
+// If the month and year being rendered matches the calendar button date...
+//// a. use the day value from the calendar button to update the currentDay variable 
+//// b. run renderCalendar(). 
+// Otherwise...
+//// a. run renderCalendar()
+//// b. remove blue styling as the month being displayed is NOT the month in the calendar button. 
 function checkCalendarButtonDate() {
     if (currentMonth === calendarButtonMonth && currentYear === calendarButtonYear) {
         currentDay = calendarButtonDay;
@@ -671,17 +679,18 @@ function checkCalendarButtonDate() {
     }
 }
 // EVENT LISTENERS //
-// 1. When the user clicks the back button, set and display the previous month
+// When the user clicks the previous month button..
+// 1. If it is January, set the month to December and go back one year. Otherwise, just decrement the month
+// 2. Check the month the user is trying to display against the date in the calendar button before rending the calendar. 
 previousMonthButton.addEventListener("click", ()=>{
-    // If it is January, set the month to December and go back one year. Otherwise, just decrement the month
     if (currentMonth === 0) {
         currentMonth = 11;
         currentYear = currentYear - 1;
     } else currentMonth = currentMonth - 1;
-    // If the month the user is going back to matches the date in the calendar button, use the day value from the calendar button to update the currentDay and render the month. Otherwise, set the day to the 15th to not cause an issue with  getWeeksInMonth() , render the calendar, and remove the blue styling since we are not displaying the month that matches the calendar date button
     checkCalendarButtonDate();
 });
-// 2. See previousMonthButton event listener for details as it mirrors this handler
+// When the user clicks the next month button..
+// (see previousMonthButton event listener for details as it mirrors this handler)
 nextMonthButton.addEventListener("click", ()=>{
     if (currentMonth === 11) {
         currentMonth = 0;
@@ -689,7 +698,11 @@ nextMonthButton.addEventListener("click", ()=>{
     } else currentMonth = currentMonth + 1;
     checkCalendarButtonDate();
 });
-// 3. When the user clicks the calendar button, if the calendar is not visible, then run  renderCalendar()  with the date set in the calendar button by updating the variables first with the calendar button date values. Then toggle the visibility of the calendar. 
+// When the user clicks the calendar button...
+// 1. If the calendar is not visible, then: 
+//// a. update variables
+//// b. run  renderCalendar()
+// 2. Toggle the visibility of the calendar. 
 dateButton.addEventListener("click", ()=>{
     if (!calendar.classList.contains("show")) {
         currentYear = calendarButtonYear;
@@ -699,7 +712,12 @@ dateButton.addEventListener("click", ()=>{
     }
     calendar.classList.toggle("show");
 });
-// 4. When the user clicks a date, hide the calendar and switch the blue highlighting from the old date to the new date. Grab the button the user selected and toggle the 'selected' class to add blue highlighting. Then loop through all the other buttons and remove the class of 'selected' without removing the styling that was just set for the new chosen date. The calendar date button updates with the new date when the user picks a different date. When the user selects a date on the calendar, loop through the date buttons, find the index of the button with the class of 'selected', and use that index to access the associated Date object, extracting its year, month, and date. Update variables used for renderCalendar() and calendar button variables as well. Finally, update the date displayed in the calendar button. 
+// When the user clicks a date..
+// 1. Hide the calendar 
+// 2. Apply 'selected' class to the date
+// 3. Remove 'selected' class from all other dates
+// 4. Update date variables
+// 5. Update date in calendar button
 dates.forEach((date)=>{
     date.addEventListener("click", (event)=>{
         calendar.classList.toggle("show");
