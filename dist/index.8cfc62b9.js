@@ -663,6 +663,14 @@ function removeHideClass() {
         day.classList.remove("hide");
     });
 }
+// Updates render variables and calendar button variables with date selected by user
+function updateVariablesWithDateSelectedByUser() {
+    for(i = 0; i < dates.length; i++)if (dates[i].classList.contains("selected")) {
+        calendarButtonYear = currentYear = allDays[i].getFullYear();
+        calendarButtonMonth = currentMonth = allDays[i].getMonth();
+        calendarButtonDay = currentDay = allDays[i].getDate();
+    }
+}
 // If the month and year being rendered matches the calendar button date...
 //// a. use the day value from the calendar button to update the currentDay variable 
 //// b. run renderCalendar(). 
@@ -714,30 +722,19 @@ dateButton.addEventListener("click", ()=>{
 });
 // When the user clicks a date..
 // 1. Hide the calendar 
-// 2. Apply 'selected' class to the chosen date
-// 3. Remove 'selected' class from all other dates
+// 2. Remove 'selected' class from all dates
+// 3. Apply 'selected' class to the chosen date
 // 4. Update date variables with selected date
 // 5. Update date in calendar button with the new date
 dates.forEach((date)=>{
     date.addEventListener("click", (event)=>{
         calendar.classList.toggle("show");
-        const selectedDate = event.target;
-        selectedDate.classList.toggle("selected");
-        dates.forEach((date)=>{
-            if (date === selectedDate) return;
-            date.classList.remove("selected");
-        });
+        removeSelectedStyling();
+        event.target.classList.toggle("selected");
         updateVariablesWithDateSelectedByUser();
         setCalendarButtonDate();
     });
 });
-function updateVariablesWithDateSelectedByUser() {
-    for(i = 0; i < dates.length; i++)if (dates[i].classList.contains("selected")) {
-        calendarButtonYear = currentYear = allDays[i].getFullYear();
-        calendarButtonMonth = currentMonth = allDays[i].getMonth();
-        calendarButtonDay = currentDay = allDays[i].getDate();
-    }
-}
 
 },{"date-fns":"9yHCA"}],"9yHCA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
