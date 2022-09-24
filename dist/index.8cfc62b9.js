@@ -551,12 +551,12 @@ const datesRowSix = grid.querySelectorAll(".rowSix");
 const monthYearHeader = calendar.querySelector(".current-month");
 const previousMonthButton = calendar.querySelector(".prev-month-button");
 const nextMonthButton = calendar.querySelector(".next-month-button");
-// Use The current date to declare and define variables to hold the current year, month, day, and number of days in the current month. The values of these will change as the user changes the date
+// Use The current date to declare and define variables to hold the current year, month, and day. The values of these will change as the user changes the date and will be used to render the calendar.
 const today = new Date();
 let currentYear = today.getFullYear();
 let currentMonth = today.getMonth();
 let currentDay = today.getDate();
-// These variables contain the date values in the calendar button
+// These variables preserve the date values in the calendar button
 let calendarButtonYear = currentYear;
 let calendarButtonMonth = currentMonth;
 let calendarButtonDay = currentDay;
@@ -714,10 +714,10 @@ dateButton.addEventListener("click", ()=>{
 });
 // When the user clicks a date..
 // 1. Hide the calendar 
-// 2. Apply 'selected' class to the date
+// 2. Apply 'selected' class to the chosen date
 // 3. Remove 'selected' class from all other dates
 // 4. Update date variables
-// 5. Update date in calendar button
+// 5. Update date in calendar button with the new date
 dates.forEach((date)=>{
     date.addEventListener("click", (event)=>{
         calendar.classList.toggle("show");
@@ -728,12 +728,9 @@ dates.forEach((date)=>{
             date.classList.remove("selected");
         });
         for(i = 0; i < dates.length; i++)if (dates[i].classList.contains("selected")) {
-            currentYear = allDays[i].getFullYear();
-            currentMonth = allDays[i].getMonth();
-            currentDay = allDays[i].getDate();
-            calendarButtonYear = currentYear;
-            calendarButtonMonth = currentMonth;
-            calendarButtonDay = currentDay;
+            calendarButtonYear = currentYear = allDays[i].getFullYear();
+            calendarButtonMonth = currentMonth = allDays[i].getMonth();
+            calendarButtonDay = currentDay = allDays[i].getDate();
             setCalendarButtonDate();
         }
     });
