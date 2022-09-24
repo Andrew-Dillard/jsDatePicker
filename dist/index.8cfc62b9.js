@@ -534,10 +534,6 @@ function hmrAcceptRun(bundle, id) {
 },{}],"6rimH":[function(require,module,exports) {
 // Date Picker
 // Fully functional calendar date picker given some starting HTML and CSS using a library called  date-fns
-/// BUGS: none!
-/// ISSUES: none!
-/// CONCERNS: none!
-/// IDEAS: 
 // Import necessary modules from the date-fns library
 // NOTE: This Node module syntax is possible with Parcel
 var _dateFns = require("date-fns");
@@ -562,9 +558,9 @@ let calendarButtonDay = currentDay = today.getDate();
 // Begin by displaying the current date in the calendar date button
 setCalendarButtonDate();
 // FUNCTIONS //
-// Displays the calendar of the appropriate month. The function runs when the user clicks one of the change month buttons, or when the date button is clicked to display the calendar
+// Displays the calendar of the appropriate month. This function runs when the user clicks the calendar date button or one of the change month buttons.
 function renderCalendar() {
-    // Display the correctly formatted month and year in the header
+    // Display the month and year in the header
     setHeader();
     // Remove any previous applications of the hide class to row six elements, then hide the sixth row if appropriate
     hideOrDisplayRowSix();
@@ -580,10 +576,12 @@ function renderCalendar() {
     highlightSelectedDate();
 }
 // renderCalendar() TASKS:
+// Display the correctly formatted month and year in the header
 function setHeader() {
     let currentMonthYear = (0, _dateFns.format)(new Date(currentYear, currentMonth), "MMMM - yyyy");
     monthYearHeader.textContent = currentMonthYear;
 }
+// Remove any previous applications of the hide class to row six elements, then hide the sixth row if appropriate
 function hideOrDisplayRowSix() {
     removeHideClass();
     let weeksInCurrentMonth = (0, _dateFns.getWeeksInMonth)(new Date(currentYear, currentMonth));
@@ -591,18 +589,20 @@ function hideOrDisplayRowSix() {
         day.classList.add("hide");
     });
 }
+// Find and store all the days in the grid at hand
 function findAllGridDays() {
     // Locate first and last day in the grid 
     let numberOfDaysInCurrentMonth = (0, _dateFns.getDaysInMonth)(new Date(currentYear, currentMonth, currentDay));
     let firstDayOfFirstWeek = (0, _dateFns.startOfWeek)(new Date(currentYear, currentMonth));
     let lastDayOfLastWeek = (0, _dateFns.endOfWeek)(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth));
-    // Create an array of all the days (Date objects) in the current month's calendar grid (35 or 42 items depending on if the month spans 6 weeks) using these beginning and ending dates. Begin by clearing the array of previous values
+    // Empty array from previous implementations
     allDays = [];
     allDays = (0, _dateFns.eachDayOfInterval)({
         start: firstDayOfFirstWeek,
         end: lastDayOfLastWeek
     });
 }
+// Apply correct date numbers
 function setGridNumbers() {
     // Extract and store the literal date numbers from the 35 or 42 days in the month grid
     let allDaysNumbers = [];
@@ -612,6 +612,7 @@ function setGridNumbers() {
     // Apply the correct date numbers to the calendar buttons
     for(i = 0; i < allDaysNumbers.length; i++)dates[i].textContent = allDaysNumbers[i];
 }
+// Locate days not in the current month to gray out
 function findDaysInAdjacentMonths() {
     // Create an array of booleans indicating each day's membership in current month or not
     areDaysPartOfMonth = [];
@@ -620,6 +621,7 @@ function findDaysInAdjacentMonths() {
         else areDaysPartOfMonth.push(false);
     });
 }
+// Add gray styling to days not in the current month
 function grayOutDaysInAdjacentMonths() {
     // Clear any old gray styling from prior function calls, then loop through the booleans, adding gray styling for dates not in the current month
     removeGrayedOutStyling();
@@ -629,6 +631,7 @@ function grayOutDaysInAdjacentMonths() {
         dates[i].classList.add("date-picker-other-month-date");
     }
 }
+// Blue highlight the date chosen by the user
 function highlightSelectedDate() {
     // Clear any outdated blue styling, then loop through all of the days looking for the current date, and give it the blue selected style
     removeSelectedStyling();
@@ -637,6 +640,7 @@ function highlightSelectedDate() {
     if (!currentMonth === calendarButtonMonth || !currentYear === calendarButtonYear) removeSelectedStyling();
 }
 // OTHER FUNCTIONS:
+// Format and display the date in the calendar button
 function setCalendarButtonDate() {
     let formattedDate = (0, _dateFns.format)(new Date(currentYear, currentMonth, currentDay), "MMMM do, yyyy");
     dateButton.textContent = formattedDate;

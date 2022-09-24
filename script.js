@@ -1,11 +1,6 @@
 // Date Picker
 // Fully functional calendar date picker given some starting HTML and CSS using a library called  date-fns
 
-/// BUGS: none!
-/// ISSUES: none!
-/// CONCERNS: none!
-/// IDEAS: 
-
 // Import necessary modules from the date-fns library
 // NOTE: This Node module syntax is possible with Parcel
 import { format, startOfWeek, endOfWeek, getDaysInMonth, getWeeksInMonth, eachDayOfInterval } from 'date-fns'
@@ -39,10 +34,10 @@ setCalendarButtonDate()
 // FUNCTIONS //
 
 
-// Displays the calendar of the appropriate month. The function runs when the user clicks one of the change month buttons, or when the date button is clicked to display the calendar
+// Displays the calendar of the appropriate month. This function runs when the user clicks the calendar date button or one of the change month buttons.
 function renderCalendar() {
   
-  // Display the correctly formatted month and year in the header
+  // Display the month and year in the header
   setHeader()
 
   // Remove any previous applications of the hide class to row six elements, then hide the sixth row if appropriate
@@ -68,11 +63,13 @@ function renderCalendar() {
 // renderCalendar() TASKS:
 
 
+// Display the correctly formatted month and year in the header
 function setHeader() {
   let currentMonthYear = format(new Date(currentYear, currentMonth), "MMMM - yyyy")
   monthYearHeader.textContent = currentMonthYear
 }
 
+// Remove any previous applications of the hide class to row six elements, then hide the sixth row if appropriate
 function hideOrDisplayRowSix() {
   removeHideClass()
   let weeksInCurrentMonth = getWeeksInMonth(new Date(currentYear, currentMonth))
@@ -83,13 +80,14 @@ function hideOrDisplayRowSix() {
   }
 }
 
+// Find and store all the days in the grid at hand
 function findAllGridDays() {
   // Locate first and last day in the grid 
   let numberOfDaysInCurrentMonth = getDaysInMonth(new Date(currentYear, currentMonth, currentDay))
   let firstDayOfFirstWeek = startOfWeek(new Date(currentYear, currentMonth))
   let lastDayOfLastWeek = endOfWeek(new Date(currentYear, currentMonth, numberOfDaysInCurrentMonth))
 
-  // Create an array of all the days (Date objects) in the current month's calendar grid (35 or 42 items depending on if the month spans 6 weeks) using these beginning and ending dates. Begin by clearing the array of previous values
+  // Empty array from previous implementations
   allDays = []
   allDays = eachDayOfInterval({
     start: firstDayOfFirstWeek,
@@ -97,6 +95,7 @@ function findAllGridDays() {
   })
 }
 
+// Apply correct date numbers
 function setGridNumbers() {
   // Extract and store the literal date numbers from the 35 or 42 days in the month grid
   let allDaysNumbers = []
@@ -109,6 +108,7 @@ function setGridNumbers() {
   }
 }
 
+// Locate days not in the current month to gray out
 function findDaysInAdjacentMonths() {
   // Create an array of booleans indicating each day's membership in current month or not
   areDaysPartOfMonth = []
@@ -121,6 +121,7 @@ function findDaysInAdjacentMonths() {
   })
 }
 
+// Add gray styling to days not in the current month
 function grayOutDaysInAdjacentMonths() {
   // Clear any old gray styling from prior function calls, then loop through the booleans, adding gray styling for dates not in the current month
   removeGrayedOutStyling()
@@ -131,6 +132,7 @@ function grayOutDaysInAdjacentMonths() {
   }
 }
 
+// Blue highlight the date chosen by the user
 function highlightSelectedDate() {
   // Clear any outdated blue styling, then loop through all of the days looking for the current date, and give it the blue selected style
   removeSelectedStyling()
@@ -155,6 +157,7 @@ function highlightSelectedDate() {
 // OTHER FUNCTIONS:
 
 
+// Format and display the date in the calendar button
 function setCalendarButtonDate() {
   let formattedDate = format(new Date(currentYear, currentMonth, currentDay), 'MMMM do, yyyy')
   dateButton.textContent = formattedDate;
