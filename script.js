@@ -3,8 +3,8 @@
 
 /// BUGS: none!
 /// ISSUES: none!
-/// CONCERNS: There is unnecessary/repeated code. I suspect there are extra steps when it comes to applying and removing the 'selected' class
-// The event listener code for the dates has a forEach then a for loop I'd like to combine into one loop for simplicity. I think I am looping too much. 
+/// CONCERNS: none!
+/// IDEAS: 
 
 // Import necessary modules from the date-fns library
 // NOTE: This Node module syntax is possible with Parcel
@@ -21,22 +21,18 @@ const monthYearHeader = calendar.querySelector('.current-month')
 const previousMonthButton = calendar.querySelector('.prev-month-button')
 const nextMonthButton = calendar.querySelector('.next-month-button')
 
-// Use The current date to declare and define variables to hold the current year, month, and day. The values of these will change as the user changes the date and will be used to render the calendar.
-const today = new Date();
-let currentYear = today.getFullYear() 
-let currentMonth = today.getMonth()
-let currentDay = today.getDate()
-
-// These variables preserve the date values in the calendar button
-let calendarButtonYear = currentYear
-let calendarButtonMonth = currentMonth
-let calendarButtonDay = currentDay
-
-// Empty array for storing all date objects in the calendar grid at hand
+// Initialize empty arrays that will hold all date objects in the grid and booleans to represent current month membership, respectively
 let allDays = []
 let areDaysPartOfMonth = []
 
-// Display the current date in the proper format to the calendar date button
+// Using the current date, initialize two sets of variables: one for the calendar button and the other for rending the calendar itself. 
+const today = new Date();
+let calendarButtonYear = currentYear = today.getFullYear() 
+let calendarButtonMonth = currentMonth = today.getMonth()
+let calendarButtonDay = currentDay = today.getDate()
+
+
+// Begin by displaying the current date in the calendar date button
 setCalendarButtonDate()
 
 
